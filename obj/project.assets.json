@@ -7239,16 +7239,16 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/stas/git/Box2D/Box2D.csproj",
+      "projectUniqueName": "/home/stas/git/box2d-dotnet-core-1.0/Box2D.csproj",
       "projectName": "Box2D",
-      "projectPath": "/home/stas/git/Box2D/Box2D.csproj",
-      "outputPath": "/home/stas/git/Box2D/obj/",
+      "projectPath": "/home/stas/git/box2d-dotnet-core-1.0/Box2D.csproj",
+      "outputPath": "/home/stas/git/box2d-dotnet-core-1.0/obj/",
       "projectStyle": "PackageReference",
       "originalTargetFrameworks": [
         "netcoreapp1.1"
       ],
       "files": {
-        "lib/netcoreapp1.1/Box2D.dll": "/home/stas/git/Box2D/bin/placeholder/netcoreapp1.1/Box2D.dll"
+        "lib/netcoreapp1.1/Box2D.dll": "/home/stas/git/box2d-dotnet-core-1.0/bin/placeholder/netcoreapp1.1/Box2D.dll"
       },
       "frameworks": {
         "netcoreapp1.1": {
