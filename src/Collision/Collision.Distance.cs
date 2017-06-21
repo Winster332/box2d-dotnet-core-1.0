@@ -24,7 +24,7 @@
 
 using System;
 using Box2DX.Common;
-using UnityEngine;
+using OpenTK;
 
 using Transform = Box2DX.Common.Transform;
 
@@ -280,18 +280,18 @@ namespace Box2DX.Collision
 #if DEBUG
 					Box2DXDebug.Assert(false);
 #endif
-					return Vector2.zero;
+					return Vector2.Zero;
 				case 1:
 					return _v1.w;
 				case 2:
 					return _v1.a * _v1.w + _v2.a * _v2.w;
 				case 3:
-					return Vector2.zero;
+					return Vector2.Zero;
 				default:
 #if DEBUG
 					Box2DXDebug.Assert(false);
 #endif
-					return Vector2.zero;
+					return Vector2.Zero;
 			}
 		}
 		
@@ -325,7 +325,7 @@ namespace Box2DX.Collision
 			}
 		}
 #else
-		internal void GetWitnessPoints(out Vector2 pA, out Vector2 pB)
+		internal void GetWitnessPoints(ref Vector2 pA, ref Vector2 pB)
 		{
 			switch (_count)
 			{
@@ -370,7 +370,7 @@ namespace Box2DX.Collision
 					return 0.0f;
 
 				case 2:
-					return (_v1.w - _v2.w).magnitude;
+					return (_v1.w - _v2.w).Length;
 
 				case 3:
 					return (_v2.w - _v1.w).Cross(_v3.w - _v1.w);
@@ -643,7 +643,7 @@ namespace Box2DX.Collision
 
 				// Compute closest point.
 				Vector2 p = simplex.GetClosestPoint();
-				float distanceSqr = p.sqrMagnitude;
+				float distanceSqr = p.LengthSquared;
 
 				// Ensure the search direction is numerically fit.
 				if (distanceSqr < Common.Settings.FLT_EPSILON_SQUARED)
@@ -735,8 +735,8 @@ namespace Box2DX.Collision
 			}
 #else
 			// Prepare output.
-			simplex.GetWitnessPoints(out output.PointA, out output.PointB);
-			output.Distance = Vector2.Distance(output.PointA, output.PointB);
+			simplex.GetWitnessPoints(ref output.PointA, ref output.PointB);
+			output.Distance = Box2DX.Common.Math.Distance(output.PointA, output.PointB);
 			output.Iterations = iter;
 			
 			// Cache the simplex.

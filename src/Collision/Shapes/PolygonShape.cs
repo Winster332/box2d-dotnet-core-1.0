@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Box2DX.Common;
-using UnityEngine;
+using OpenTK;
 
 using Transform = Box2DX.Common.Transform;
 
@@ -75,7 +75,7 @@ namespace Box2DX.Collision
 				int i1 = i;
 				int i2 = i + 1 < count ? i + 1 : 0;
 				Vector2 edge = _vertices[i2] - _vertices[i1];
-				Box2DXDebug.Assert(edge.sqrMagnitude > (Mathf.Epsilon * Mathf.Epsilon));
+				Box2DXDebug.Assert(edge.LengthSquared > (Box2DX.Common.Math.Epsilon * Box2DX.Common.Math.Epsilon));
 				_normals[i] = edge.CrossScalarPostMultiply(1.0f);
 				_normals[i].Normalize();
 			}
@@ -127,7 +127,7 @@ namespace Box2DX.Collision
 			_normals[1] = new Vector2(1.0f, 0.0f);
 			_normals[2] = new Vector2(0.0f, 1.0f);
 			_normals[3] = new Vector2(-1.0f, 0.0f);
-			_centroid = Vector2.zero;
+			_centroid = Vector2.Zero;
 		}
 
 
@@ -188,7 +188,7 @@ namespace Box2DX.Collision
 		public override SegmentCollide TestSegment(Transform xf, out float lambda, out Vector2 normal, Segment segment, float maxLambda)
 		{
 			lambda = 0f;
-			normal = Vector2.zero;
+			normal = Vector2.Zero;
 
 			float lower = 0.0f, upper = maxLambda;
 
@@ -297,13 +297,13 @@ namespace Box2DX.Collision
 
 			Box2DXDebug.Assert(_vertexCount >= 3);
 
-			Vector2 center = Vector2.zero;
+			Vector2 center = Vector2.Zero;
 			float area = 0.0f;
 			float I = 0.0f;
 
 			// pRef is the reference point for forming triangles.
 			// It's location doesn't change the result (except for rounding error).
-			Vector2 pRef = Vector2.zero;
+			Vector2 pRef = Vector2.Zero;
 
 #if O
 			// This code would put the reference point inside the polygon.
@@ -334,9 +334,9 @@ namespace Box2DX.Collision
 				// Area weighted centroid
 				center += triangleArea * k_inv3 * (p1 + p2 + p3);
 
-				float px = p1.x, py = p1.y;
-				float ex1 = e1.x, ey1 = e1.y;
-				float ex2 = e2.x, ey2 = e2.y;
+				float px = p1.X, py = p1.Y;
+				float ex1 = e1.X, ey1 = e1.Y;
+				float ex2 = e2.X, ey2 = e2.Y;
 
 				float intx2 = k_inv3 * (0.25f * (ex1 * ex1 + ex2 * ex1 + ex2 * ex2) + (px * ex1 + px * ex2)) + 0.5f * px * px;
 				float inty2 = k_inv3 * (0.25f * (ey1 * ey1 + ey2 * ey1 + ey2 * ey2) + (py * ey1 + py * ey2)) + 0.5f * py * py;
@@ -429,14 +429,14 @@ namespace Box2DX.Collision
 			float intoLambda = (0 - depths[intoIndex]) / (depths[intoIndex2] - depths[intoIndex]);
 			float outoLambda = (0 - depths[outoIndex]) / (depths[outoIndex2] - depths[outoIndex]);
 
-			Vector2 intoVec = new Vector2(_vertices[intoIndex].x * (1 - intoLambda) + _vertices[intoIndex2].x * intoLambda,
-							_vertices[intoIndex].y * (1 - intoLambda) + _vertices[intoIndex2].y * intoLambda);
-			Vector2 outoVec = new Vector2(_vertices[outoIndex].x * (1 - outoLambda) + _vertices[outoIndex2].x * outoLambda,
-							_vertices[outoIndex].y * (1 - outoLambda) + _vertices[outoIndex2].y * outoLambda);
+			Vector2 intoVec = new Vector2(_vertices[intoIndex].X * (1 - intoLambda) + _vertices[intoIndex2].X * intoLambda,
+							_vertices[intoIndex].Y * (1 - intoLambda) + _vertices[intoIndex2].Y * intoLambda);
+			Vector2 outoVec = new Vector2(_vertices[outoIndex].X * (1 - outoLambda) + _vertices[outoIndex2].X * outoLambda,
+							_vertices[outoIndex].Y * (1 - outoLambda) + _vertices[outoIndex2].Y * outoLambda);
 
 			//Initialize accumulator
 			float area = 0;
-			Vector2 center = Vector2.zero;
+			Vector2 center = Vector2.Zero;
 			Vector2 p2 = _vertices[intoIndex2];
 			Vector2 p3;
 
@@ -482,13 +482,13 @@ namespace Box2DX.Collision
 		{
 			int vCount = _vertexCount;
 			Box2DXDebug.Assert(vCount > 0);
-			float sr = (_vertices[0] - pivot).sqrMagnitude;
+			float sr = (_vertices[0] - pivot).LengthSquared;
 			for (int i = 1; i < vCount; ++i)
 			{
-				sr = Common.Math.Max(sr, (_vertices[i] - pivot).sqrMagnitude);
+				sr = Common.Math.Max(sr, (_vertices[i] - pivot).LengthSquared);
 			}
 
-			return Mathf.Sqrt(sr);
+			return (float)System.Math.Sqrt(sr);
 		}
 
 		/// <summary>
@@ -538,12 +538,12 @@ namespace Box2DX.Collision
 		{
 			Box2DXDebug.Assert(count >= 3);
 
-			Vector2 c = Vector2.zero;
+			Vector2 c = Vector2.Zero;
 			float area = 0f;
 
 			// pRef is the reference point for forming triangles.
 			// It's location doesn't change the result (except for rounding error).
-			Vector2 pRef = Vector2.zero;
+			Vector2 pRef = Vector2.Zero;
 #if O
 			// This code would put the reference point inside the polygon.
 			for (int i = 0; i < count; ++i)
@@ -575,7 +575,7 @@ namespace Box2DX.Collision
 			}
 
 			// Centroid
-			Box2DXDebug.Assert(area > Mathf.Epsilon);
+			Box2DXDebug.Assert(area > Box2DX.Common.Math.Epsilon);
 			c *= 1.0f / area;
 			return c;
 		}

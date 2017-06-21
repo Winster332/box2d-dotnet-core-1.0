@@ -144,7 +144,7 @@ using System.Text;
 using Box2DX.Common;
 using Box2DX.Collision;
 
-using UnityEngine;
+using OpenTK;
 
 namespace Box2DX.Dynamics
 {
@@ -232,7 +232,7 @@ namespace Box2DX.Dynamics
 				b._angularVelocity += step.Dt * b._invI * b._torque;
 
 				// Reset forces.
-				b._force = Vector2.zero;
+				b._force = Vector2.Zero;
 				b._torque = 0.0f;
 
 				// Apply damping.
@@ -242,8 +242,8 @@ namespace Box2DX.Dynamics
 				// v2 = exp(-c * dt) * v1
 				// Taylor expansion:
 				// v2 = (1.0f - c * dt) * v1
-				b._linearVelocity *= Mathf.Clamp(1.0f - step.Dt * b._linearDamping, 0.0f, 1.0f);
-				b._angularVelocity *= Mathf.Clamp(1.0f - step.Dt * b._angularDamping, 0.0f, 1.0f);
+				b._linearVelocity *= Box2DX.Common.Math.Clamp(1.0f - step.Dt * b._linearDamping, 0.0f, 1.0f);
+				b._angularVelocity *= Box2DX.Common.Math.Clamp(1.0f - step.Dt * b._angularDamping, 0.0f, 1.0f);
 			}
 
 			ContactSolver contactSolver = new ContactSolver(step, _contacts, _contactCount);
@@ -281,7 +281,7 @@ namespace Box2DX.Dynamics
 				Vector2 translation = step.Dt * b._linearVelocity;
 				if (Vector2.Dot(translation, translation) > Settings.MaxTranslationSquared)
 				{
-					b._linearVelocity = (Settings.MaxTranslation * step.Inv_Dt) * translation.normalized;
+					b._linearVelocity = (Settings.MaxTranslation * step.Inv_Dt) * translation.Normalized();
 				}
 
 				float rotation = step.Dt * b._angularVelocity;
@@ -381,7 +381,7 @@ namespace Box2DX.Dynamics
 					{
 						Body b = _bodies[i];
 						b._flags |= Body.BodyFlags.Sleep;
-						b._linearVelocity = Vector2.zero;
+						b._linearVelocity = Vector2.Zero;
 						b._angularVelocity = 0.0f;
 					}
 				}
@@ -427,7 +427,7 @@ namespace Box2DX.Dynamics
 				Vector2 translation = subStep.Dt * b._linearVelocity;
 				if (Vector2.Dot(translation, translation) > Settings.MaxTranslationSquared)
 				{
-					b._linearVelocity = (Settings.MaxTranslation * subStep.Inv_Dt) * translation.normalized;
+					b._linearVelocity = (Settings.MaxTranslation * subStep.Inv_Dt) * translation.Normalized();
 				}
 
 				float rotation = subStep.Dt * b._angularVelocity;

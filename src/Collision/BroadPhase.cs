@@ -45,7 +45,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Box2DX.Common;
-using UnityEngine;
+using OpenTK;
 
 namespace Box2DX.Collision
 {
@@ -132,8 +132,8 @@ namespace Box2DX.Collision
 			_proxyCount = 0;
 
 			Vector2 d = worldAABB.UpperBound - worldAABB.LowerBound;
-			_quantizationFactor.x = (float)BROADPHASE_MAX / d.x;
-			_quantizationFactor.y = (float)BROADPHASE_MAX / d.y;
+			_quantizationFactor.X = (float)BROADPHASE_MAX / d.X;
+			_quantizationFactor.Y = (float)BROADPHASE_MAX / d.Y;
 
 			for (ushort i = 0; i < Settings.MaxProxies - 1; ++i)
 			{
@@ -170,7 +170,7 @@ namespace Box2DX.Collision
 		public bool InRange(AABB aabb)
 		{
 			Vector2 d = Vector2.Max(aabb.LowerBound - _worldAABB.UpperBound, _worldAABB.LowerBound - aabb.UpperBound);
-			return Mathf.Max(d.x, d.y) < 0.0f;
+			return System.Math.Max(d.X, d.Y) < 0.0f;
 		}
 
 		// Create and destroy proxies. These call Flush first.
@@ -645,16 +645,16 @@ namespace Box2DX.Collision
 		{
 			float maxLambda = 1;
 
-			float dx = (segment.P2.x - segment.P1.x) * _quantizationFactor.x;
-			float dy = (segment.P2.y - segment.P1.y) * _quantizationFactor.y;
+			float dx = (segment.P2.X - segment.P1.X) * _quantizationFactor.X;
+			float dy = (segment.P2.Y - segment.P1.Y) * _quantizationFactor.Y;
 
 			int sx = dx < -Settings.FLT_EPSILON ? -1 : (dx > Settings.FLT_EPSILON ? 1 : 0);
 			int sy = dy < -Settings.FLT_EPSILON ? -1 : (dy > Settings.FLT_EPSILON ? 1 : 0);
 
 			Box2DXDebug.Assert(sx != 0 || sy != 0);
 
-			float p1x = (segment.P1.x - _worldAABB.LowerBound.x) * _quantizationFactor.x;
-			float p1y = (segment.P1.y - _worldAABB.LowerBound.y) * _quantizationFactor.y;
+			float p1x = (segment.P1.X - _worldAABB.LowerBound.X) * _quantizationFactor.X;
+			float p1y = (segment.P1.Y - _worldAABB.LowerBound.Y) * _quantizationFactor.Y;
 #if ALLOWUNSAFE
 			ushort* startValues = stackalloc ushort[2];
 			ushort* startValues2 = stackalloc ushort[2];
@@ -952,8 +952,8 @@ namespace Box2DX.Collision
 			lowerValues = new ushort[2];
 			upperValues = new ushort[2];
 
-			Box2DXDebug.Assert(aabb.UpperBound.x >= aabb.LowerBound.x);
-			Box2DXDebug.Assert(aabb.UpperBound.y >= aabb.LowerBound.y);
+			Box2DXDebug.Assert(aabb.UpperBound.X >= aabb.LowerBound.X);
+			Box2DXDebug.Assert(aabb.UpperBound.Y >= aabb.LowerBound.Y);
 
 			Vector2 minVertex = Common.Math.Clamp(aabb.LowerBound, _worldAABB.LowerBound, _worldAABB.UpperBound);
 			Vector2 maxVertex = Common.Math.Clamp(aabb.UpperBound, _worldAABB.LowerBound, _worldAABB.UpperBound);
@@ -961,11 +961,11 @@ namespace Box2DX.Collision
 			// Bump lower bounds downs and upper bounds up. This ensures correct sorting of
 			// lower/upper bounds that would have equal values.
 			// TODO_ERIN implement fast float to uint16 conversion.
-			lowerValues[0] = (ushort)((ushort)(_quantizationFactor.x * (minVertex.x - _worldAABB.LowerBound.x)) & (BROADPHASE_MAX - 1));
-			upperValues[0] = (ushort)((ushort)(_quantizationFactor.x * (maxVertex.x - _worldAABB.LowerBound.x)) | 1);
+			lowerValues[0] = (ushort)((ushort)(_quantizationFactor.X * (minVertex.X - _worldAABB.LowerBound.X)) & (BROADPHASE_MAX - 1));
+			upperValues[0] = (ushort)((ushort)(_quantizationFactor.X * (maxVertex.X - _worldAABB.LowerBound.X)) | 1);
 
-			lowerValues[1] = (ushort)((ushort)(_quantizationFactor.y * (minVertex.y - _worldAABB.LowerBound.y)) & (BROADPHASE_MAX - 1));
-			upperValues[1] = (ushort)((ushort)(_quantizationFactor.y * (maxVertex.y - _worldAABB.LowerBound.y)) | 1);
+			lowerValues[1] = (ushort)((ushort)(_quantizationFactor.Y * (minVertex.Y - _worldAABB.LowerBound.Y)) & (BROADPHASE_MAX - 1));
+			upperValues[1] = (ushort)((ushort)(_quantizationFactor.Y * (maxVertex.Y - _worldAABB.LowerBound.Y)) | 1);
 		}
 
 		// This one is only used for validation.

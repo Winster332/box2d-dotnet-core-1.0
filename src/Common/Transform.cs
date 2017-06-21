@@ -1,15 +1,12 @@
-﻿/*
+/*
   Box2DX Copyright (c) 2008 Ihar Kalasouski http://code.google.com/p/box2dx
   Box2D original C++ version Copyright (c) 2006-2007 Erin Catto http://www.gphysics.com
-
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
   arising from the use of this software.
-
   Permission is granted to anyone to use this software for any purpose,
   including commercial applications, and to alter it and redistribute it
   freely, subject to the following restrictions:
-
   1. The origin of this software must not be misrepresented; you must not
      claim that you wrote the original software. If you use this software
      in a product, an acknowledgment in the product documentation would be
@@ -22,8 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using OpenTK;
 
-using UnityEngine;
 
 namespace Box2DX.Common
 {
@@ -68,8 +65,8 @@ namespace Box2DX.Common
 		{	
 #if USE_MATRIX_FOR_ROTATION
 			return Math.MulT(rotation, vector - position);
-#else
-			return Quaternion.Inverse(rotation) * (vector - position);
+#else           
+			return Quaternion.Invert(rotation).Xyz.ToVector2() * (vector - position);
 #endif
 		}
 		
@@ -78,7 +75,7 @@ namespace Box2DX.Common
 #if USE_MATRIX_FOR_ROTATION
 			return Math.MulT(rotation, vector);
 #else
-			return Quaternion.Inverse(rotation) * vector;
+			return Quaternion.Invert(rotation).Xyz.ToVector2() * vector;
 #endif
 		}
 		
@@ -87,7 +84,7 @@ namespace Box2DX.Common
 #if USE_MATRIX_FOR_ROTATION
 			return position + Math.Mul(rotation, vector);
 #else
-			return position + (rotation * vector.ToVector3()).ToVector2();
+			return position + (rotation.Xyz * vector.ToVector3()).ToVector2();
 #endif
 			
 		}
@@ -100,14 +97,14 @@ namespace Box2DX.Common
 #if USE_MATRIX_FOR_ROTATION
 			return Math.Mul(rotation, vector);
 #else
-			return (rotation * vector.ToVector3()).ToVector2();
+			return (rotation.Xyz * vector.ToVector3()).ToVector2();
 #endif
 		}
 		
 #if USE_MATRIX_FOR_ROTATION
 		public static readonly Transform identify = new Transform(Vector2.zero, Mat22.Identity);
 #else 
-		public static readonly Transform identity = new Transform(Vector2.zero, Quaternion.identity);
+		public static readonly Transform identity = new Transform(Vector2.Zero, Quaternion.Identity);
 #endif 
 	}
 }

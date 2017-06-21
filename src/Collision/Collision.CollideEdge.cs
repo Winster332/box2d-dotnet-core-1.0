@@ -20,7 +20,7 @@
 */
 
 using Box2DX.Common;
-using UnityEngine;
+using OpenTK;
 
 using Transform = Box2DX.Common.Transform;
 
@@ -45,7 +45,7 @@ namespace Box2DX.Collision
 			if (u1 <= 0.0f)
 			{
 				// Behind v1
-				if ((cLocal- v1).sqrMagnitude > radius * radius)
+				if ((cLocal- v1).LengthSquared > radius * radius)
 				{
 					return;
 				}
@@ -61,7 +61,7 @@ namespace Box2DX.Collision
 			else if (u2 <= 0.0f)
 			{
 				// Ahead of v2
-				if ((cLocal- v2).sqrMagnitude > radius * radius)
+				if ((cLocal- v2).LengthSquared > radius * radius)
 				{
 					return;
 				}

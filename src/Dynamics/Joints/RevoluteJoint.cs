@@ -37,7 +37,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Box2DX.Common;
-using UnityEngine;
+using OpenTK;
 
 namespace Box2DX.Dynamics
 {
@@ -178,7 +178,7 @@ namespace Box2DX.Dynamics
 
 		public override float GetReactionTorque(float inv_dt)
 		{
-			return inv_dt * _impulse.z;
+			return inv_dt * _impulse.Z;
 		}
 
 		/// <summary>
@@ -311,7 +311,7 @@ namespace Box2DX.Dynamics
 			_localAnchor2 = def.LocalAnchor2;
 			_referenceAngle = def.ReferenceAngle;
 
-			_impulse = Vector3.zero;
+			_impulse = Vector3.Zero;
 			_motorImpulse = 0.0f;
 
 			_lowerAngle = def.LowerAngle;
@@ -351,15 +351,15 @@ namespace Box2DX.Dynamics
 			float m1 = b1._invMass, m2 = b2._invMass;
 			float i1 = b1._invI, i2 = b2._invI;
 
-			_mass.Col1.x = m1 + m2 + r1.y * r1.y * i1 + r2.y * r2.y * i2;
-			_mass.Col2.x = -r1.y * r1.x * i1 - r2.y * r2.x * i2;
-			_mass.Col3.x = -r1.y * i1 - r2.y * i2;
-			_mass.Col1.y = _mass.Col2.x;
-			_mass.Col2.y = m1 + m2 + r1.x * r1.x * i1 + r2.x * r2.x * i2;
-			_mass.Col3.y = r1.x * i1 + r2.x * i2;
-			_mass.Col1.z = _mass.Col3.x;
-			_mass.Col2.z = _mass.Col3.y;
-			_mass.Col3.z = i1 + i2;
+			_mass.Col1.X = m1 + m2 + r1.Y * r1.Y * i1 + r2.Y * r2.Y * i2;
+			_mass.Col2.X = -r1.Y * r1.X * i1 - r2.Y * r2.X * i2;
+			_mass.Col3.X = -r1.Y * i1 - r2.Y * i2;
+			_mass.Col1.Y = _mass.Col2.X;
+			_mass.Col2.Y = m1 + m2 + r1.X * r1.X * i1 + r2.X * r2.X * i2;
+			_mass.Col3.Y = r1.X * i1 + r2.Y * i2;
+			_mass.Col1.Z = _mass.Col3.X;
+			_mass.Col2.Z = _mass.Col3.Y;
+			_mass.Col3.Z = i1 + i2;
 
 			_motorMass = 1.0f / (i1 + i2);
 
@@ -379,7 +379,7 @@ namespace Box2DX.Dynamics
 				{
 					if (_limitState != LimitState.AtLowerLimit)
 					{
-						_impulse.z = 0.0f;
+						_impulse.Z = 0.0f;
 					}
 					_limitState = LimitState.AtLowerLimit;
 				}
@@ -387,14 +387,14 @@ namespace Box2DX.Dynamics
 				{
 					if (_limitState != LimitState.AtUpperLimit)
 					{
-						_impulse.z = 0.0f;
+						_impulse.Z = 0.0f;
 					}
 					_limitState = LimitState.AtUpperLimit;
 				}
 				else
 				{
 					_limitState = LimitState.InactiveLimit;
-					_impulse.z = 0.0f;
+					_impulse.Z = 0.0f;
 				}
 			}
 			else
@@ -411,14 +411,14 @@ namespace Box2DX.Dynamics
 				Vector2 P = _impulse.ToVector2();
 
 				b1._linearVelocity -= m1 * P;
-				b1._angularVelocity -= i1 * (r1.Cross(P) + _motorImpulse + _impulse.z);
+				b1._angularVelocity -= i1 * (r1.Cross(P) + _motorImpulse + _impulse.Z);
 
 				b2._linearVelocity += m2 * P;
-				b2._angularVelocity += i2 * (r2.Cross(P) + _motorImpulse + _impulse.z);
+				b2._angularVelocity += i2 * (r2.Cross(P) + _motorImpulse + _impulse.Z);
 			}
 			else
 			{
-				_impulse = Vector3.zero;
+				_impulse = Vector3.Zero;
 				_motorImpulse = 0.0f;
 			}
 		}
@@ -443,7 +443,7 @@ namespace Box2DX.Dynamics
 				float impulse = _motorMass * (-Cdot);
 				float oldImpulse = _motorImpulse;
 				float maxImpulse = step.Dt * _maxMotorTorque;
-				_motorImpulse = Mathf.Clamp(_motorImpulse + impulse, -maxImpulse, maxImpulse);
+				_motorImpulse = Box2DX.Common.Math.Clamp(_motorImpulse + impulse, -maxImpulse, maxImpulse);
 				impulse = _motorImpulse - oldImpulse;
 
 				w1 -= i1 * impulse;
@@ -459,7 +459,7 @@ namespace Box2DX.Dynamics
 				// Solve point-to-point constraint
 				Vector2 Cdot1 = v2 + r2.CrossScalarPreMultiply(w2) - v1 - r1.CrossScalarPreMultiply(w1);
 				float Cdot2 = w2 - w1;
-				Vector3 Cdot = new Vector3(Cdot1.x, Cdot1.y, Cdot2);
+				Vector3 Cdot = new Vector3(Cdot1.X, Cdot1.Y, Cdot2);
 
 				Vector3 impulse = _mass.Solve33(-Cdot);
 
@@ -469,40 +469,40 @@ namespace Box2DX.Dynamics
 				}
 				else if (_limitState == LimitState.AtLowerLimit)
 				{
-					float newImpulse = _impulse.z + impulse.z;
+					float newImpulse = _impulse.Z + impulse.Z;
 					if (newImpulse < 0.0f)
 					{
 						Vector2 reduced = _mass.Solve22(-Cdot1);
-						impulse.x = reduced.x;
-						impulse.y = reduced.y;
-						impulse.z = -_impulse.z;
-						_impulse.x += reduced.x;
-						_impulse.y += reduced.y;
-						_impulse.z = 0.0f;
+						impulse.X = reduced.X;
+						impulse.Y = reduced.Y;
+						impulse.Z = -_impulse.Z;
+						_impulse.X += reduced.X;
+						_impulse.Y += reduced.Y;
+						_impulse.Z = 0.0f;
 					}
 				}
 				else if (_limitState == LimitState.AtUpperLimit)
 				{
-					float newImpulse = _impulse.z + impulse.z;
+					float newImpulse = _impulse.Z + impulse.Z;
 					if (newImpulse > 0.0f)
 					{
 						Vector2 reduced = _mass.Solve22(-Cdot1);
-						impulse.x = reduced.x;
-						impulse.y = reduced.y;
-						impulse.z = -_impulse.z;
-						_impulse.x += reduced.x;
-						_impulse.y += reduced.y;
-						_impulse.z = 0.0f;
+						impulse.X = reduced.X;
+						impulse.Y = reduced.Y;
+						impulse.Z = -_impulse.Z;
+						_impulse.X += reduced.X;
+						_impulse.Y += reduced.Y;
+						_impulse.Z = 0.0f;
 					}
 				}
 
 				Vector2 P = impulse.ToVector2();
 
 				v1 -= m1 * P;
-				w1 -= i1 * (r1.Cross(P) + impulse.z);
+				w1 -= i1 * (r1.Cross(P) + impulse.Z);
 
 				v2 += m2 * P;
-				w2 += i2 * (r2.Cross(P) + impulse.z);
+				w2 += i2 * (r2.Cross(P) + impulse.Z);
 			}
 			else
 			{
@@ -513,8 +513,8 @@ namespace Box2DX.Dynamics
 				Vector2 Cdot = v2 + r2.CrossScalarPreMultiply(w2) - v1 - r1.CrossScalarPreMultiply(w1);
 				Vector2 impulse = _mass.Solve22(-Cdot);
 
-				_impulse.x += impulse.x;
-				_impulse.y += impulse.y;
+				_impulse.X += impulse.X;
+				_impulse.Y += impulse.Y;
 
 				v1 -= m1 * impulse;
 				w1 -= i1 * r1.Cross(impulse);
@@ -548,7 +548,7 @@ namespace Box2DX.Dynamics
 				if (_limitState == LimitState.EqualLimits)
 				{
 					// Prevent large angular corrections
-					float C = Mathf.Clamp(angle, -Settings.MaxAngularCorrection, Settings.MaxAngularCorrection);
+					float C = Box2DX.Common.Math.Clamp(angle, -Settings.MaxAngularCorrection, Settings.MaxAngularCorrection);
 					limitImpulse = -_motorMass * C;
 					angularError = Box2DXMath.Abs(C);
 				}
@@ -558,7 +558,7 @@ namespace Box2DX.Dynamics
 					angularError = -C;
 
 					// Prevent large angular corrections and allow some slop.
-					C = Mathf.Clamp(C + Settings.AngularSlop, -Settings.MaxAngularCorrection, 0.0f);
+					C = Box2DX.Common.Math.Clamp(C + Settings.AngularSlop, -Settings.MaxAngularCorrection, 0.0f);
 					limitImpulse = -_motorMass * C;
 				}
 				else if (_limitState == LimitState.AtUpperLimit)
@@ -567,7 +567,7 @@ namespace Box2DX.Dynamics
 					angularError = C;
 
 					// Prevent large angular corrections and allow some slop.
-					C = Mathf.Clamp(C - Settings.AngularSlop, 0.0f, Settings.MaxAngularCorrection);
+					C = Box2DX.Common.Math.Clamp(C - Settings.AngularSlop, 0.0f, Settings.MaxAngularCorrection);
 					limitImpulse = -_motorMass * C;
 				}
 
@@ -584,14 +584,14 @@ namespace Box2DX.Dynamics
 				Vector2 r2 = b2.GetTransform().TransformDirection(_localAnchor2 - b2.GetLocalCenter());
 
 				Vector2 C = b2._sweep.C + r2 - b1._sweep.C - r1;
-				positionError = C.magnitude;
+				positionError = C.Length;
 
 				float invMass1 = b1._invMass, invMass2 = b2._invMass;
 				float invI1 = b1._invI, invI2 = b2._invI;
 
 				// Handle large detachment.
 				float k_allowedStretch = 10.0f * Settings.LinearSlop;
-				if (C.sqrMagnitude > k_allowedStretch * k_allowedStretch)
+				if (C.LengthSquared > k_allowedStretch * k_allowedStretch)
 				{
 					// Use a particle solution (no rotation).
 					Vector2 u = C; u.Normalize();
@@ -607,16 +607,16 @@ namespace Box2DX.Dynamics
 				}
 
 				Mat22 K1 = new Mat22();
-				K1.Col1.x = invMass1 + invMass2; K1.Col2.x = 0.0f;
-				K1.Col1.y = 0.0f; K1.Col2.y = invMass1 + invMass2;
+				K1.Col1.X = invMass1 + invMass2; K1.Col2.X = 0.0f;
+				K1.Col1.Y = 0.0f; K1.Col2.Y = invMass1 + invMass2;
 
 				Mat22 K2 = new Mat22();
-				K2.Col1.x = invI1 * r1.y * r1.y; K2.Col2.x = -invI1 * r1.x * r1.y;
-				K2.Col1.y = -invI1 * r1.x * r1.y; K2.Col2.y = invI1 * r1.x * r1.x;
+				K2.Col1.X = invI1 * r1.Y * r1.Y; K2.Col2.X = -invI1 * r1.X * r1.Y;
+				K2.Col1.Y = -invI1 * r1.X * r1.Y; K2.Col2.Y = invI1 * r1.X * r1.X;
 
 				Mat22 K3 = new Mat22();
-				K3.Col1.x = invI2 * r2.y * r2.y; K3.Col2.x = -invI2 * r2.x * r2.y;
-				K3.Col1.y = -invI2 * r2.x * r2.y; K3.Col2.y = invI2 * r2.x * r2.x;
+				K3.Col1.X = invI2 * r2.Y * r2.Y; K3.Col2.X = -invI2 * r2.X * r2.Y;
+				K3.Col1.Y = -invI2 * r2.X * r2.Y; K3.Col2.Y = invI2 * r2.X * r2.X;
 
 				Mat22 K = K1 + K2 + K3;
 				Vector2 impulse_ = K.Solve(-C);

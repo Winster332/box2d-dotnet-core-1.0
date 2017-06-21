@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Box2DX.Common;
-using UnityEngine;
+using OpenTK;
 using Transform = Box2DX.Common.Transform;
 
 namespace Box2DX.Dynamics
@@ -58,9 +58,9 @@ namespace Box2DX.Dynamics
 
 		public void SetZero()
 		{
-			Linear1 = Vector2.zero;
+			Linear1 = Vector2.Zero;
 			Angular1 = 0.0f;
-			Linear2 = Vector2.zero;
+			Linear2 = Vector2.Zero;
 			Angular2 = 0.0f;
 		}
 

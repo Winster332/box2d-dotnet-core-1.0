@@ -21,7 +21,7 @@
 
 using System;
 using Box2DX.Common;
-using UnityEngine;
+using OpenTK;
 
 using Transform = Box2DX.Common.Transform;
 
@@ -40,10 +40,10 @@ namespace Box2DX.Collision
 			d1 = b.LowerBound - a.UpperBound;
 			d2 = a.LowerBound - b.UpperBound;
 
-			if (d1.x > 0.0f || d1.y > 0.0f)
+			if (d1.X > 0.0f || d1.Y > 0.0f)
 				return false;
 
-			if (d2.x > 0.0f || d2.y > 0.0f)
+			if (d2.X > 0.0f || d2.Y > 0.0f)
 				return false;
 
 			return true;
@@ -320,7 +320,7 @@ namespace Box2DX.Collision
 
 				if (0.0f <= a && a <= maxLambda * denom)
 				{
-					float mu2 = -r.x * b.y + r.y * b.x;
+					float mu2 = -r.X * b.Y + r.Y * b.X;
 
 					// Does the segment intersect this segment?
 					if (-k_slop * denom <= mu2 && mu2 <= denom * (1.0f + k_slop))
@@ -369,7 +369,7 @@ namespace Box2DX.Collision
 			get
 			{
 				Vector2 d = UpperBound - LowerBound;
-				bool valid = d.x >= 0.0f && d.y >= 0.0f;
+				bool valid = d.X >= 0.0f && d.Y >= 0.0f;
 				valid = valid && LowerBound.IsValid() && UpperBound.IsValid();
 				return valid;
 			}
@@ -397,10 +397,10 @@ namespace Box2DX.Collision
 		/// Does this aabb contain the provided AABB.
 		public bool Contains(AABB aabb)
 		{
-			bool result = LowerBound.x <= aabb.LowerBound.x;
-			result = result && LowerBound.y <= aabb.LowerBound.y;
-			result = result && aabb.UpperBound.x <= UpperBound.x;
-			result = result && aabb.UpperBound.y <= UpperBound.y;
+			bool result = LowerBound.X <= aabb.LowerBound.X;
+			result = result && LowerBound.Y <= aabb.LowerBound.Y;
+			result = result && aabb.UpperBound.X <= UpperBound.X;
+			result = result && aabb.UpperBound.Y <= UpperBound.Y;
 			return result;
 		}
 
@@ -420,7 +420,7 @@ namespace Box2DX.Collision
 			Vector2 d = input.P2 - input.P1;
 			Vector2 absD = d.Abs();
 
-			Vector2 normal = Vector2.zero;
+			Vector2 normal = Vector2.Zero;
 
 			for (int i = 0; i < 2; ++i)
 			{
@@ -450,7 +450,7 @@ namespace Box2DX.Collision
 					// Push the min up
 					if (t1 > tmin)
 					{
-						normal = Vector2.zero;
+						normal = Vector2.Zero;
 						normal[i] = s;
 						tmin = t1;
 					}
@@ -542,7 +542,7 @@ namespace Box2DX.Collision
 						Vector2 pointA = xfA.TransformPoint(manifold.LocalPoint);
 						Vector2 pointB = xfB.TransformPoint(manifold.Points[0].LocalPoint);
 						Vector2 normal = new Vector2(1.0f, 0.0f);
-						if ((pointA - pointB).sqrMagnitude > (Mathf.Epsilon * Mathf.Epsilon))
+						if ((pointA - pointB).LengthSquared > (Box2DX.Common.Math.Epsilon * Box2DX.Common.Math.Epsilon))
 						{
 							normal = pointB - pointA;
 							normal.Normalize();

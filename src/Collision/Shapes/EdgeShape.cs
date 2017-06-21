@@ -23,7 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Box2DX.Common;
-using UnityEngine;
+using OpenTK;
 
 using Transform = Box2DX.Common.Transform;
 
@@ -77,7 +77,7 @@ namespace Box2DX.Collision
 			_v2 = v2;
 
 			_direction = _v2 - _v1;
-			_length = _direction.magnitude;
+			_length = _direction.Length;
 			_direction.Normalize();
 			_normal = _direction.CrossScalarPostMultiply(1.0f);
 
@@ -109,7 +109,7 @@ namespace Box2DX.Collision
 
 				if (0.0f <= a && a <= maxLambda * denom)
 				{
-					float mu2 = -r.x * b.y + r.y * b.x;
+					float mu2 = -r.X * b.Y + r.Y * b.X;
 
 					// Does the segment intersect this segment?
 					if (-k_slop * denom <= mu2 && mu2 <= denom * (1.0f + k_slop))
@@ -272,9 +272,9 @@ namespace Box2DX.Collision
 
 		public override float ComputeSweepRadius(Vector2 pivot)
 		{
-			float ds1 = (_v1 - pivot).sqrMagnitude;
-			float ds2 = (_v2 - pivot).sqrMagnitude;
-			return Mathf.Sqrt(Mathf.Max(ds1, ds2));
+			float ds1 = (_v1 - pivot).LengthSquared;
+			float ds2 = (_v2 - pivot).LengthSquared;
+			return (float)System.Math.Sqrt((float)System.Math.Max(ds1, ds2));
 		}
 	}
 }

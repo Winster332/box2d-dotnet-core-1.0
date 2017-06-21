@@ -24,7 +24,7 @@ using System;
 using Box2DX.Common;
 using Box2DX.Collision;
 
-using UnityEngine;
+using OpenTK;
 using Transform = Box2DX.Common.Transform;
 
 namespace Box2DX.Dynamics
@@ -41,13 +41,13 @@ namespace Box2DX.Dynamics
 		public BodyDef(byte init)
 		{
 			MassData = new MassData();
-			MassData.Center = Vector2.zero;
+			MassData.Center = Vector2.Zero;
 			MassData.Mass = 0.0f;
 			MassData.I = 0.0f;
 			UserData = null;
-			Position = Vector2.zero;
+			Position = Vector2.Zero;
 			Angle = 0.0f;
-			LinearVelocity = Vector2.zero; 
+			LinearVelocity = Vector2.Zero; 
 			AngularVelocity = 0.0f;
 			LinearDamping = 0.0f;
 			AngularDamping = 0.0f;
@@ -288,7 +288,7 @@ namespace Box2DX.Dynamics
 
 		internal bool SynchronizeFixtures()
 		{
-			Transform xf1;
+			Transform xf1 = new Transform();
 			xf1.rotation = Box2DX.Common.Math.AngleToRotation(_sweep.A0);
 			//xf1.R = new Mat22(_sweep.A0);
 			xf1.position = _sweep.C0 - xf1.TransformDirection(_sweep.LocalCenter);
@@ -306,7 +306,7 @@ namespace Box2DX.Dynamics
 			if (inRange == false)
 			{
 				_flags |= BodyFlags.Frozen;
-				_linearVelocity = Vector2.zero;
+				_linearVelocity = Vector2.Zero;
 				_angularVelocity = 0.0f;
 
 				// Failure
@@ -480,7 +480,7 @@ namespace Box2DX.Dynamics
 			_I = 0.0f;
 			_invI = 0.0f;
 
-			Vector2 center = Vector2.zero;
+			Vector2 center = Vector2.Zero;
 			for (Fixture f = _fixtureList; f != null; f = f.Next)
 			{
 				MassData massData;
@@ -573,7 +573,7 @@ namespace Box2DX.Dynamics
 #if USE_MATRIX_FOR_ROTATION
 			_sweep.A0 = _sweep.A = rotation.GetAngle();
 #else
-			_sweep.A0 = _sweep.A = rotation.eulerAngles.z * Mathf.Deg2Rad;
+			_sweep.A0 = _sweep.A = (rotation.Z * 180 / (float)System.Math.PI) * 0.0174532924f;
 #endif
 
 			bool freeze = false;
@@ -591,7 +591,7 @@ namespace Box2DX.Dynamics
 			if (freeze == true)
 			{
 				_flags |= BodyFlags.Frozen;
-				_linearVelocity = Vector2.zero;
+				_linearVelocity = Vector2.Zero;
 				_angularVelocity = 0.0f;
 
 				// Failure
@@ -1027,9 +1027,9 @@ namespace Box2DX.Dynamics
 		{
 			_flags |= BodyFlags.Sleep;
 			_sleepTime = 0.0f;
-			_linearVelocity = Vector2.zero;
+			_linearVelocity = Vector2.Zero;
 			_angularVelocity = 0.0f;
-			_force = Vector2.zero;
+			_force = Vector2.Zero;
 			_torque = 0.0f;
 		}
 

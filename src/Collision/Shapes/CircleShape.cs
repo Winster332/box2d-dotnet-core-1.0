@@ -20,7 +20,7 @@
 */
 
 using Box2DX.Common;
-using UnityEngine;
+using OpenTK;
 
 using Transform = Box2DX.Common.Transform;
 
@@ -53,7 +53,7 @@ namespace Box2DX.Collision
 		public override SegmentCollide TestSegment(Transform xf, out float lambda, out Vector2 normal, Segment segment, float maxLambda)
 		{
 			lambda = 0f;
-			normal = Vector2.zero;
+			normal = Vector2.Zero;
 
 			Vector2 position = xf.position + xf.TransformDirection(_position);
 			Vector2 s = segment.P1 - position;
@@ -99,15 +99,15 @@ namespace Box2DX.Collision
 			aabb = new AABB();
 
 			Vector2 p = xf.position + xf.TransformDirection(_position);
-			aabb.LowerBound = new Vector2(p.x - _radius, p.y - _radius);
-			aabb.UpperBound = new Vector2(p.x + _radius, p.y + _radius);
+			aabb.LowerBound = new Vector2(p.X - _radius, p.Y - _radius);
+			aabb.UpperBound = new Vector2(p.X + _radius, p.Y + _radius);
 		}
 
 		public override void ComputeMass(out MassData massData, float density)
 		{
 			massData = new MassData();
 
-			massData.Mass = density * Mathf.PI * _radius * _radius;
+			massData.Mass = density * (float)System.Math.PI * _radius * _radius;
 			massData.Center = _position;
 
 			// inertia about the local origin
@@ -138,8 +138,8 @@ namespace Box2DX.Collision
 				l * Box2DX.Common.Math.Sqrt(r2 - l2);
 			float com = -2.0f / 3.0f * (float)System.Math.Pow(r2 - l2, 1.5f) / area;
 
-			c.x = p.x + normal.x * com;
-			c.y = p.y + normal.y * com;
+			c.X = p.X + normal.X * com;
+			c.Y = p.Y + normal.Y * com;
 
 			return area;
 		}
@@ -171,7 +171,7 @@ namespace Box2DX.Collision
 
 		public override float ComputeSweepRadius(Vector2 pivot)
 		{
-			return Vector2.Distance(_position, pivot);
+			return Box2DX.Common.Math.Distance(_position, pivot);
 		}
 
 		/// <summary>

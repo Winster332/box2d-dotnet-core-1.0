@@ -1,15 +1,12 @@
-﻿/*
+/*
   Box2DX Copyright (c) 2008 Ihar Kalasouski http://code.google.com/p/box2dx
   Box2D original C++ version Copyright (c) 2006-2007 Erin Catto http://www.gphysics.com
-
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
   arising from the use of this software.
-
   Permission is granted to anyone to use this software for any purpose,
   including commercial applications, and to alter it and redistribute it
   freely, subject to the following restrictions:
-
   1. The origin of this software must not be misrepresented; you must not
      claim that you wrote the original software. If you use this software
      in a product, an acknowledgment in the product documentation would be
@@ -22,41 +19,42 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using UnityEngine;
+using OpenTK;
 
-using Random = UnityEngine.Random;
+using Random = System.Random;
 
 namespace Box2DX.Common
 {
 	public static class Vector2Extension 
 	{	
+        public static float Rad2Deg = (float)360.0f / (float)(System.Math.PI * 2);
 		public static Vector3 ToVector3(this Vector2 vector) 
 		{ 
-			return new Vector3(vector.x, vector.y, 0.0f);
+			return new Vector3(vector.X, vector.Y, 0.0f);
 		}
 		
 		public static bool IsValid(this Vector2 vector)
 		{
-			return Math.IsValid(vector.x) && Math.IsValid(vector.y);
+			return Math.IsValid(vector.X) && Math.IsValid(vector.Y);
 		}
 		
 		public static float Cross(this Vector2 vector, Vector2 other) 
 		{ 
-			return vector.x * other.y - vector.y * other.x;
+			return vector.X * other.Y - vector.Y * other.X;
 		}
 		
 		public static Vector2 CrossScalarPostMultiply(this Vector2 vector, float s) 
 		{ 
-			return new Vector2(s * vector.y, -s * vector.x);
+			return new Vector2(s * vector.Y, -s * vector.X);
 		}
 		
 		public static Vector2 CrossScalarPreMultiply(this Vector2 vector, float s)
 		{
-			return new Vector2(-s * vector.y, s * vector.x);
+			return new Vector2(-s * vector.Y, s * vector.X);
 		}
 		
 		public static Vector2 Abs(this Vector2 vector) { 
-			return new Vector2(Mathf.Abs(vector.x), Mathf.Abs(vector.y));
+			return new Vector2(Math.Abs(vector.X), Math.Abs(vector.Y));
 		}
 	}
 	
@@ -64,7 +62,7 @@ namespace Box2DX.Common
 	{ 
 		public static Vector2 ToVector2(this Vector3 vector) 
 		{
-			return new Vector2(vector.x, vector.y);
+			return new Vector2(vector.X, vector.Y);
 		}
 	}
 	
@@ -72,7 +70,7 @@ namespace Box2DX.Common
 	{
 		public static Quaternion FromAngle2D(float radians) 
 		{ 
-			return Quaternion.AngleAxis(radians * Mathf.Rad2Deg, Vector3.forward);
+			return Quaternion.FromAxisAngle(new Vector3(0, 0, 1), radians * ((float)360.0f / (float)(System.Math.PI * 2)));
 		}
 	}
 	
@@ -128,9 +126,21 @@ namespace Box2DX.Common
 			return x;
 		}
 
+		public static float Clamp(float f, float min, float max) {
+			if (f < min)
+				return min;
+			else if (f > max)
+				return max;
+			else return f;
+		}
+		public static float Rad2Deg = 57.29578f;
+		public static float Epsilon = 1.401298E-45f;
 		public static float Sqrt(float x)
 		{
-			return Mathf.Sqrt(x);
+			return Math.Sqrt(x);
+		}
+		public static float Distance(Vector2 v1, Vector2 v2) {
+			return (float)System.Math.Sqrt(System.Math.Pow(v2.X - v1.X, 2) + System.Math.Pow(v2.Y - v1.Y, 2));
 		}
 		
 		/// <summary>
@@ -167,7 +177,7 @@ namespace Box2DX.Common
 
 		public static Vector2 Abs(Vector2 a)
 		{
-			return new Vector2(Mathf.Abs(a.x), Mathf.Abs(a.y));
+			return new Vector2(Math.Abs(a.X), Math.Abs(a.Y));
 		}
 
 		public static Mat22 Abs(Mat22 A)
@@ -215,7 +225,7 @@ namespace Box2DX.Common
 		/// </summary>
 		public static Vector2 Mul(Mat22 A, Vector2 v)
 		{
-			return new Vector2(A.Col1.x * v.x + A.Col2.x * v.y, A.Col1.y * v.x + A.Col2.y * v.y);
+			return new Vector2(A.Col1.X * v.X + A.Col2.X * v.Y, A.Col1.Y * v.X + A.Col2.Y * v.Y);
 		}
 
 		/// <summary>
@@ -270,7 +280,7 @@ namespace Box2DX.Common
 		/// </summary>
 		public static Vector3 Mul(Mat33 A, Vector3 v)
 		{
-			return v.x * A.Col1 + v.y * A.Col2 + v.z * A.Col3;
+			return v.X * A.Col1 + v.Y * A.Col2 + v.Z * A.Col3;
 		}
 
 		public static float Atan2(float y, float x)

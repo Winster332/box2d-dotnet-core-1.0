@@ -25,7 +25,7 @@ using System;
 using Box2DX.Collision;
 using Box2DX.Common;
 
-using UnityEngine;
+using OpenTK;
 using Transform = Box2DX.Common.Transform;
 
 namespace Box2DX.Dynamics
@@ -748,7 +748,7 @@ namespace Box2DX.Dynamics
 
 					// b2Clamp the accumulated force
 					float maxFriction = friction * ccp.NormalImpulse;
-					float newImpulse = Mathf.Clamp(ccp.TangentImpulse + lambda, -maxFriction, maxFriction);
+					float newImpulse = Box2DX.Common.Math.Clamp(ccp.TangentImpulse + lambda, -maxFriction, maxFriction);
 					lambda = newImpulse - ccp.TangentImpulse;
 
 					// Apply contact impulse
@@ -822,7 +822,7 @@ namespace Box2DX.Dynamics
 					ContactConstraintPoint cp2 = pointsPtr[1];
 
 					Vector2 a = new Vector2(cp1.NormalImpulse, cp2.NormalImpulse);
-					Box2DXDebug.Assert(a.x >= 0.0f && a.y >= 0.0f);
+					Box2DXDebug.Assert(a.X >= 0.0f && a.Y >= 0.0f);
 
 					// Relative velocity at contact
 					Vector2 dv1 = vB + cp1.RB.CrossScalarPreMultiply(wB) - vA - cp1.RA.CrossScalarPreMultiply(wA);
@@ -851,14 +851,14 @@ namespace Box2DX.Dynamics
 						//
 						Vector2 x = -c.NormalMass.Multiply(b);
 
-						if (x.x >= 0.0f && x.y >= 0.0f)
+						if (x.X >= 0.0f && x.Y >= 0.0f)
 						{
 							// Resubstitute for the incremental impulse
 							Vector2 d = x - a;
 
 							// Apply incremental impulse
-							Vector2 P1 = d.x * normal;
-							Vector2 P2 = d.y * normal;
+							Vector2 P1 = d.X * normal;
+							Vector2 P2 = d.Y * normal;
 							vA -= invMassA * (P1 + P2);
 							wA -= invIA * (cp1.RA.Cross(P1) + cp2.RA.Cross(P2));
 
@@ -866,8 +866,8 @@ namespace Box2DX.Dynamics
 							wB += invIB * (cp1.RB.Cross(P1) + cp2.RB.Cross(P2));
 
 							// Accumulate
-							cp1.NormalImpulse = x.x;
-							cp2.NormalImpulse = x.y;
+							cp1.NormalImpulse = x.X;
+							cp2.NormalImpulse = x.Y;
 
 #if DEBUG_SOLVER
 							// Postconditions
@@ -890,19 +890,19 @@ namespace Box2DX.Dynamics
 						//   0 = a11 * x1' + a12 * 0 + b1' 
 						// vn2 = a21 * x1' + a22 * 0 + b2'
 						//
-						x.x = -cp1.NormalMass * b.x;
-						x.y = 0.0f;
+						x.X = -cp1.NormalMass * b.X;
+						x.Y = 0.0f;
 						vn1 = 0.0f;
-						vn2 = c.K.Col1.y * x.x + b.y;
+						vn2 = c.K.Col1.Y * x.X + b.Y;
 
-						if (x.x >= 0.0f && vn2 >= 0.0f)
+						if (x.X >= 0.0f && vn2 >= 0.0f)
 						{
 							// Resubstitute for the incremental impulse
 							Vector2 d = x - a;
 
 							// Apply incremental impulse
-							Vector2 P1 = d.x * normal;
-							Vector2 P2 = d.y * normal;
+							Vector2 P1 = d.X * normal;
+							Vector2 P2 = d.Y * normal;
 							vA -= invMassA * (P1 + P2);
 							wA -= invIA * (cp1.RA.Cross(P1) + cp2.RA.Cross(P2));
 
@@ -910,8 +910,8 @@ namespace Box2DX.Dynamics
 							wB += invIB * (cp1.RB.Cross(P1) + cp2.RB.Cross(P2));
 
 							// Accumulate
-							cp1.NormalImpulse = x.x;
-							cp2.NormalImpulse = x.y;
+							cp1.NormalImpulse = x.X;
+							cp2.NormalImpulse = x.Y;
 
 #if DEBUG_SOLVER
 							// Postconditions
@@ -932,19 +932,19 @@ namespace Box2DX.Dynamics
 						// vn1 = a11 * 0 + a12 * x2' + b1' 
 						//   0 = a21 * 0 + a22 * x2' + b2'
 						//
-						x.x = 0.0f;
-						x.y = -cp2.NormalMass * b.y;
-						vn1 = c.K.Col2.x * x.y + b.x;
+						x.X = 0.0f;
+						x.Y = -cp2.NormalMass * b.Y;
+						vn1 = c.K.Col2.X * x.Y + b.X;
 						vn2 = 0.0f;
 
-						if (x.y >= 0.0f && vn1 >= 0.0f)
+						if (x.Y >= 0.0f && vn1 >= 0.0f)
 						{
 							// Resubstitute for the incremental impulse
 							Vector2 d = x - a;
 
 							// Apply incremental impulse
-							Vector2 P1 = d.x * normal;
-							Vector2 P2 = d.y * normal;
+							Vector2 P1 = d.X * normal;
+							Vector2 P2 = d.Y * normal;
 							vA -= invMassA * (P1 + P2);
 							wA -= invIA * (cp1.RA.Cross(P1) + cp2.RA.Cross(P2));
 
@@ -952,8 +952,8 @@ namespace Box2DX.Dynamics
 							wB += invIB * (cp1.RB.Cross(P1) + cp2.RB.Cross(P2));
 
 							// Accumulate
-							cp1.NormalImpulse = x.x;
-							cp2.NormalImpulse = x.y;
+							cp1.NormalImpulse = x.X;
+							cp2.NormalImpulse = x.Y;
 
 #if DEBUG_SOLVER
 							// Postconditions
@@ -972,10 +972,10 @@ namespace Box2DX.Dynamics
 						// 
 						// vn1 = b1
 						// vn2 = b2;
-						x.x = 0.0f;
-						x.y = 0.0f;
-						vn1 = b.x;
-						vn2 = b.y;
+						x.X = 0.0f;
+						x.Y = 0.0f;
+						vn1 = b.X;
+						vn2 = b.Y;
 
 						if (vn1 >= 0.0f && vn2 >= 0.0f)
 						{
@@ -983,8 +983,8 @@ namespace Box2DX.Dynamics
 							Vector2 d = x - a;
 
 							// Apply incremental impulse
-							Vector2 P1 = d.x * normal;
-							Vector2 P2 = d.y * normal;
+							Vector2 P1 = d.X * normal;
+							Vector2 P2 = d.Y * normal;
 							vA -= invMassA * (P1 + P2);
 							wA -= invIA * (cp1.RA.Cross(P1) + cp2.RA.Cross(P2));
 
@@ -992,8 +992,8 @@ namespace Box2DX.Dynamics
 							wB += invIB * (cp1.RB.Cross(P1) + cp2.RB.Cross(P2));
 
 							// Accumulate
-							cp1.NormalImpulse = x.x;
-							cp2.NormalImpulse = x.y;
+							cp1.NormalImpulse = x.X;
+							cp2.NormalImpulse = x.Y;
 
 							break;
 						}
@@ -1042,7 +1042,7 @@ namespace Box2DX.Dynamics
 						{
 							Vector2 pointA = cc.BodyA.GetWorldPoint(cc.LocalPoint);
 							Vector2 pointB = cc.BodyB.GetWorldPoint(cc.Points[0].LocalPoint);
-							if ((pointA - pointB).sqrMagnitude > (Mathf.Epsilon * Mathf.Epsilon))
+							if ((pointA - pointB).LengthSquared > (Box2DX.Common.Math.Epsilon *Box2DX.Common.Math.Epsilon))
 							{
 								Normal = pointB - pointA;
 								Normal.Normalize();
@@ -1124,7 +1124,7 @@ namespace Box2DX.Dynamics
 					minSeparation = Common.Math.Min(minSeparation, separation);
 
 					// Prevent large corrections and allow slop.
-					float C = baumgarte * Mathf.Clamp(separation + Settings.LinearSlop, -Settings.MaxLinearCorrection, 0.0f);
+					float C = baumgarte * Box2DX.Common.Math.Clamp(separation + Settings.LinearSlop, -Settings.MaxLinearCorrection, 0.0f);
 
 					// Compute normal impulse
 					float impulse = -c.Points[j].EqualizedMass * C;

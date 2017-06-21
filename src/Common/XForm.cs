@@ -1,15 +1,12 @@
-﻿/*
+/*
   Box2DX Copyright (c) 2008 Ihar Kalasouski http://code.google.com/p/box2dx
   Box2D original C++ version Copyright (c) 2006-2007 Erin Catto http://www.gphysics.com
-
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
   arising from the use of this software.
-
   Permission is granted to anyone to use this software for any purpose,
   including commercial applications, and to alter it and redistribute it
   freely, subject to the following restrictions:
-
   1. The origin of this software must not be misrepresented; you must not
      claim that you wrote the original software. If you use this software
      in a product, an acknowledgment in the product documentation would be
@@ -22,8 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
-using UnityEngine;
+using OpenTK;
 
 namespace Box2DX.Common
 {
@@ -52,7 +48,7 @@ namespace Box2DX.Common
 		/// </summary>
 		public void SetIdentity()
 		{
-			position = Vector2.zero;
+			position = Vector2.Zero;
 			R = Mat22.Identity;
 		}
 
@@ -66,7 +62,7 @@ namespace Box2DX.Common
 		/// Calculate the angle that the rotation matrix represents.
 		public float GetAngle()
 		{
-			return Mathf.Atan2(R.Col1.y, R.Col1.x);
+			return Math.Atan2(R.Col1.Y, R.Col1.X);
 		}
 		
 		public Vector2 TransformDirection(Vector2 vector) 
@@ -89,6 +85,6 @@ namespace Box2DX.Common
 			return Math.MulT(R, vector - position);
 		}
 
-		public static XForm Identity { get { return new XForm(Vector2.zero, Mat22.Identity); } }
+		public static XForm Identity { get { return new XForm(Vector2.Zero, Mat22.Identity); } }
 	}
 }

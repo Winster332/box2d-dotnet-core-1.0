@@ -19,7 +19,7 @@
 using Box2DX.Common;
 using Math = Box2DX.Common.Math;
 
-using UnityEngine;
+using OpenTK;
 
 namespace Box2DX.Dynamics.Controllers
 {
@@ -65,7 +65,7 @@ namespace Box2DX.Dynamics.Controllers
                     {
                         Body body2 = j.body;
                         Vector2 d = body2.GetWorldCenter() - body1.GetWorldCenter();
-                        float r2 = d.sqrMagnitude;
+                        float r2 = d.LengthSquared;
                         if (r2 < Settings.FLT_EPSILON)
                             continue;
 
@@ -84,7 +84,7 @@ namespace Box2DX.Dynamics.Controllers
                     {
                         Body body2 = j.body;
                         Vector2 d = body2.GetWorldCenter() - body1.GetWorldCenter();
-                        float r2 = d.sqrMagnitude;
+                        float r2 = d.LengthSquared;
                         if (r2 < Settings.FLT_EPSILON)
                             continue;
                         Vector2 f = G / r2 * body1.GetMass() * body2.GetMass() * d;

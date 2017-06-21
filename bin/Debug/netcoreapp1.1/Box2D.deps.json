@@ -1,0 +1,81 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v1.1",
+    "signature": "b23cfe406b8c456088dfd804f86224a428d2b9bf"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v1.1": {
+      "box2d/1.0.0": {
+        "dependencies": {
+          "OpenTK.NETCore": "1.1.2571.6431"
+        },
+        "runtime": {
+          "Box2D.dll": {}
+        }
+      },
+      "opentk.netcore/1.1.2571.6431": {
+        "dependencies": {
+          "System.Collections.Specialized": "4.0.1",
+          "System.ComponentModel.Primitives": "4.1.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/OpenTK.dll": {}
+        }
+      },
+      "system.collections.nongeneric/4.0.1": {
+        "runtime": {
+          "lib/netstandard1.3/System.Collections.NonGeneric.dll": {}
+        }
+      },
+      "system.collections.specialized/4.0.1": {
+        "dependencies": {
+          "System.Collections.NonGeneric": "4.0.1"
+        },
+        "runtime": {
+          "lib/netstandard1.3/System.Collections.Specialized.dll": {}
+        }
+      },
+      "system.componentmodel.primitives/4.1.0": {
+        "runtime": {
+          "lib/netstandard1.0/System.ComponentModel.Primitives.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "box2d/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "opentk.netcore/1.1.2571.6431": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XXc+xTC5jSvnpr+XpbwUpzttAgYGW2ZNTZS9O0TYbu2h9J7SqrAt5OtBOZ0d4uhVZdzjExiXt8rO20CwahboZA==",
+      "path": "opentk.netcore/1.1.2571.6431",
+      "hashPath": "opentk.netcore.1.1.2571.6431.nupkg.sha512"
+    },
+    "system.collections.nongeneric/4.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xm/KY9Rby+6rBKxrl4GLS25wS+tPhFNzCOkcDm4N8XFlzTYMwe5a3qf/YsDEMi1yRlH6C1yJBdnP9DB1M2HGiA==",
+      "path": "system.collections.nongeneric/4.0.1",
+      "hashPath": "system.collections.nongeneric.4.0.1.nupkg.sha512"
+    },
+    "system.collections.specialized/4.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-VO+bTIbQEVGoNnvwbJ3W5Ry8/BdbrlvSTViyBrGzFTwEtawFtYhGg+FgMr5Q1dReblKsiKaftiqDd8MasjNhig==",
+      "path": "system.collections.specialized/4.0.1",
+      "hashPath": "system.collections.specialized.4.0.1.nupkg.sha512"
+    },
+    "system.componentmodel.primitives/4.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-52Ul3S6rKJqGk9zEFyu3r2wuu1AjeSFjTkSn0HCQqHIV3Nxt8RxLrnlOLFOcKbHjKShO8oWX2pBdPL0JM8GSyg==",
+      "path": "system.componentmodel.primitives/4.1.0",
+      "hashPath": "system.componentmodel.primitives.4.1.0.nupkg.sha512"
+    }
+  }
+}

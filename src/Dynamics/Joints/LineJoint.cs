@@ -84,7 +84,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Box2DX.Common;
-using UnityEngine;
+using OpenTK;
 
 using Transform = Box2DX.Common.Transform;
 
@@ -103,8 +103,8 @@ namespace Box2DX.Dynamics
 		public LineJointDef()
 		{
 			Type = JointType.LineJoint;
-			localAnchor1 = Vector2.zero;
-			localAnchor2 = Vector2.zero;
+			localAnchor1 = Vector2.Zero;
+			localAnchor2 = Vector2.Zero;
 			localAxis1 = new Vector2(1.0f, 0.0f);
 			enableLimit = false;
 			lowerTranslation = 0.0f;
@@ -213,7 +213,7 @@ namespace Box2DX.Dynamics
 			_localXAxis1 = def.localAxis1;
 			_localYAxis1 = _localXAxis1.CrossScalarPreMultiply(1.0f);
 			
-			_impulse = Vector2.zero;
+			_impulse = Vector2.Zero;
 			_motorMass = 0.0f;
 			_motorImpulse = 0.0f;
 
@@ -225,8 +225,8 @@ namespace Box2DX.Dynamics
 			_enableMotor = def.enableMotor;
 			_limitState = LimitState.InactiveLimit;
 
-			_axis = Vector2.zero;
-			_perp = Vector2.zero;
+			_axis = Vector2.Zero;
+			_perp = Vector2.Zero;
 		}
 
 		public override Vector2 Anchor1
@@ -241,7 +241,7 @@ namespace Box2DX.Dynamics
 
 		public override Vector2 GetReactionForce(float inv_dt)
 		{
-			return inv_dt * (_impulse.x * _perp + (_motorImpulse + _impulse.y) * _axis);
+			return inv_dt * (_impulse.X * _perp + (_motorImpulse + _impulse.Y) * _axis);
 		}
 
 		public override float GetReactionTorque(float inv_dt)
@@ -453,7 +453,7 @@ namespace Box2DX.Dynamics
 					if (_limitState != LimitState.AtLowerLimit)
 					{
 						_limitState = LimitState.AtLowerLimit;
-						_impulse.y = 0.0f;
+						_impulse.Y = 0.0f;
 					}
 				}
 				else if (jointTranslation >= _upperTranslation)
@@ -461,13 +461,13 @@ namespace Box2DX.Dynamics
 					if (_limitState != LimitState.AtUpperLimit)
 					{
 						_limitState = LimitState.AtUpperLimit;
-						_impulse.y = 0.0f;
+						_impulse.Y = 0.0f;
 					}
 				}
 				else
 				{
 					_limitState = LimitState.InactiveLimit;
-					_impulse.y = 0.0f;
+					_impulse.Y = 0.0f;
 				}
 			}
 			else
@@ -486,9 +486,9 @@ namespace Box2DX.Dynamics
 				_impulse *= step.DtRatio;
 				_motorImpulse *= step.DtRatio;
 
-				Vector2 P = _impulse.x * _perp + (_motorImpulse + _impulse.y) * _axis;
-				float L1 = _impulse.x * _s1 + (_motorImpulse + _impulse.y) * _a1;
-				float L2 = _impulse.x * _s2 + (_motorImpulse + _impulse.y) * _a2;
+				Vector2 P = _impulse.X * _perp + (_motorImpulse + _impulse.Y) * _axis;
+				float L1 = _impulse.X * _s1 + (_motorImpulse + _impulse.Y) * _a1;
+				float L2 = _impulse.X * _s2 + (_motorImpulse + _impulse.Y) * _a2;
 
 				b1._linearVelocity -= _invMass1 * P;
 				b1._angularVelocity -= _invI1 * L1;
@@ -498,7 +498,7 @@ namespace Box2DX.Dynamics
 			}
 			else
 			{
-				_impulse = Vector2.zero;
+				_impulse = Vector2.Zero;
 				_motorImpulse = 0.0f;
 			}
 		}
@@ -520,7 +520,7 @@ namespace Box2DX.Dynamics
 				float impulse = _motorMass * (_motorSpeed - Cdot);
 				float oldImpulse = _motorImpulse;
 				float maxImpulse = step.Dt * _maxMotorForce;
-				_motorImpulse = Mathf.Clamp(_motorImpulse + impulse, -maxImpulse, maxImpulse);
+				_motorImpulse = Box2DX.Common.Math.Clamp(_motorImpulse + impulse, -maxImpulse, maxImpulse);
 				impulse = _motorImpulse - oldImpulse;
 
 				Vector2 P = impulse * _axis;
@@ -548,23 +548,23 @@ namespace Box2DX.Dynamics
 
 				if (_limitState == LimitState.AtLowerLimit)
 				{
-					_impulse.y = Mathf.Max(_impulse.y, 0.0f);
+					_impulse.Y = System.Math.Max(_impulse.Y, 0.0f);
 				}
 				else if (_limitState == LimitState.AtUpperLimit)
 				{
-					_impulse.y = Mathf.Min(_impulse.y, 0.0f);
+					_impulse.Y = System.Math.Min(_impulse.Y, 0.0f);
 				}
 
 				// f2(1) = invK(1,1) * (-Cdot(1) - K(1,2) * (f2(2) - f1(2))) + f1(1)
-				float b = -Cdot1 - (_impulse.y - f1.y) * _K.Col2.x;
-				float f2r = b / _K.Col1.x + f1.x;
-				_impulse.x = f2r;
+				float b = -Cdot1 - (_impulse.Y - f1.Y) * _K.Col2.Y;
+				float f2r = b / _K.Col1.X + f1.X;
+				_impulse.X = f2r;
 
 				df = _impulse - f1;
 
-				Vector2 P = df.x * _perp + df.y * _axis;
-				float L1 = df.x * _s1 + df.y * _a1;
-				float L2 = df.x * _s2 + df.y * _a2;
+				Vector2 P = df.X * _perp + df.Y * _axis;
+				float L1 = df.X * _s1 + df.Y * _a1;
+				float L2 = df.X * _s2 + df.Y * _a2;
 
 				v1 -= _invMass1 * P;
 				w1 -= _invI1 * L1;
@@ -575,8 +575,8 @@ namespace Box2DX.Dynamics
 			else
 			{
 				// Limit is inactive, just solve the prismatic constraint in block form.
-				float df = (-Cdot1) / _K.Col1.x;
-				_impulse.x += df;
+				float df = (-Cdot1) / _K.Col1.X;
+				_impulse.X += df;
 
 				Vector2 P = df * _perp;
 				float L1 = df * _s1;
@@ -625,24 +625,24 @@ namespace Box2DX.Dynamics
 				_a2 = r2.Cross(_axis);
 
 				float translation = Vector2.Dot(_axis, d);
-				if (Mathf.Abs(_upperTranslation - _lowerTranslation) < 2.0f * Settings.LinearSlop)
+				if (System.Math.Abs(_upperTranslation - _lowerTranslation) < 2.0f * Settings.LinearSlop)
 				{
 					// Prevent large angular corrections
-					C2 = Mathf.Clamp(translation, -Settings.MaxLinearCorrection, Settings.MaxLinearCorrection);
+					C2 = Box2DX.Common.Math.Clamp(translation, -Settings.MaxLinearCorrection, Settings.MaxLinearCorrection);
 					linearError = Box2DX.Common.Math.Abs(translation);
 					active = true;
 				}
 				else if (translation <= _lowerTranslation)
 				{
 					// Prevent large linear corrections and allow some slop.
-					C2 = Mathf.Clamp(translation - _lowerTranslation + Settings.LinearSlop, -Settings.MaxLinearCorrection, 0.0f);
+					C2 = Box2DX.Common.Math.Clamp(translation - _lowerTranslation + Settings.LinearSlop, -Settings.MaxLinearCorrection, 0.0f);
 					linearError = _lowerTranslation - translation;
 					active = true;
 				}
 				else if (translation >= _upperTranslation)
 				{
 					// Prevent large linear corrections and allow some slop.
-					C2 = Mathf.Clamp(translation - _upperTranslation - Settings.LinearSlop, 0.0f, Settings.MaxLinearCorrection);
+					C2 = Box2DX.Common.Math.Clamp(translation - _upperTranslation - Settings.LinearSlop, 0.0f, Settings.MaxLinearCorrection);
 					linearError = translation - _upperTranslation;
 					active = true;
 				}
@@ -673,8 +673,8 @@ namespace Box2DX.Dynamics
 				_K.Col2 = new Vector2(k12, k22);
 
 				Vector2 C = new Vector2();
-				C.x = C1;
-				C.y = C2;
+				C.X = C1;
+				C.Y = C2;
 
 				impulse = _K.Solve(-C);
 			}
@@ -686,13 +686,13 @@ namespace Box2DX.Dynamics
 				float k11 = m1 + m2 + i1 * _s1 * _s1 + i2 * _s2 * _s2;
 
 				float impulse1 = (-C1) / k11;
-				impulse.x = impulse1;
-				impulse.y = 0.0f;
+				impulse.X = impulse1;
+				impulse.Y = 0.0f;
 			}
 
-			Vector2 P = impulse.x * _perp + impulse.y * _axis;
-			float L1 = impulse.x * _s1 + impulse.y * _a1;
-			float L2 = impulse.x * _s2 + impulse.y * _a2;
+			Vector2 P = impulse.X * _perp + impulse.Y * _axis;
+			float L1 = impulse.X * _s1 + impulse.Y * _a1;
+			float L2 = impulse.X * _s2 + impulse.Y * _a2;
 
 			c1 -= _invMass1 * P;
 			a1 -= _invI1 * L1;

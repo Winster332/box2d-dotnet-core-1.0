@@ -39,7 +39,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Box2DX.Common;
-using UnityEngine;
+using OpenTK;
 
 namespace Box2DX.Dynamics
 {
@@ -56,8 +56,8 @@ namespace Box2DX.Dynamics
 		public DistanceJointDef()
 		{
 			Type = JointType.DistanceJoint;
-			LocalAnchor1 = Vector2.zero;
-			LocalAnchor2 = Vector2.zero;
+			LocalAnchor1 = Vector2.Zero;
+			LocalAnchor2 = Vector2.Zero;
 			Length = 1.0f;
 			FrequencyHz = 0.0f;
 			DampingRatio = 0.0f;
@@ -73,7 +73,7 @@ namespace Box2DX.Dynamics
 			LocalAnchor1 = body1.GetLocalPoint(anchor1);
 			LocalAnchor2 = body2.GetLocalPoint(anchor2);
 			Vector2 d = anchor2 - anchor1;
-			Length = d.magnitude;
+			Length = d.Length;
 		}
 
 		/// <summary>
@@ -164,14 +164,14 @@ namespace Box2DX.Dynamics
 			_u = b2._sweep.C + r2 - b1._sweep.C - r1;
 
 			// Handle singularity.
-			float length = _u.magnitude;
+			float length = _u.Length;
 			if (length > Settings.LinearSlop)
 			{
 				_u *= 1.0f / length;
 			}
 			else
 			{
-				_u = Vector2.zero;
+				_u = Vector2.Zero;
 			}
 
 			float cr1u = r1.Cross(_u);
@@ -232,10 +232,10 @@ namespace Box2DX.Dynamics
 
 			Vector2 d = b2._sweep.C + r2 - b1._sweep.C - r1;
 
-			float length = d.magnitude;
+			float length = d.Length;
 			d.Normalize();
 			float C = length - _length;
-			C = Mathf.Clamp(C, -Settings.MaxLinearCorrection, Settings.MaxLinearCorrection);
+			C = Box2DX.Common.Math.Clamp(C, -Settings.MaxLinearCorrection, Settings.MaxLinearCorrection);
 
 			float impulse = -_mass * C;
 			_u = d;

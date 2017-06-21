@@ -25,7 +25,7 @@ using System.Text;
 using Box2DX.Collision;
 using Box2DX.Common;
 
-using UnityEngine;
+using OpenTK;
 using Transform = Box2DX.Common.Transform;
 
 namespace Box2DX.Dynamics
@@ -123,7 +123,7 @@ namespace Box2DX.Dynamics
 		public CircleDef()
 		{
 			Type = ShapeType.CircleShape;
-			LocalPosition = Vector2.zero;
+			LocalPosition = Vector2.Zero;
 			Radius = 1.0f;
 		}
 	}

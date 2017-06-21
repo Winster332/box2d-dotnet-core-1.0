@@ -32,7 +32,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Box2DX.Common;
-using UnityEngine;
+using OpenTK;
 
 namespace Box2DX.Dynamics
 {
@@ -45,7 +45,7 @@ namespace Box2DX.Dynamics
 		public MouseJointDef()
 		{
 			Type = JointType.MouseJoint;
-			Target = Vector2.zero;
+			Target = Vector2.Zero;
 			MaxForce = 0.0f;
 			FrequencyHz = 5.0f;
 			DampingRatio = 0.7f;
@@ -134,7 +134,7 @@ namespace Box2DX.Dynamics
 			_localAnchor = _body2.GetTransform().InverseTransformPoint(_target);
 
 			_maxForce = def.MaxForce;
-			_impulse = Vector2.zero;
+			_impulse = Vector2.Zero;
 
 			_frequencyHz = def.FrequencyHz;
 			_dampingRatio = def.DampingRatio;
@@ -175,16 +175,16 @@ namespace Box2DX.Dynamics
 			float invI = b._invI;
 
 			Mat22 K1 = new Mat22();
-			K1.Col1.x = invMass; K1.Col2.x = 0.0f;
-			K1.Col1.y = 0.0f; K1.Col2.y = invMass;
+			K1.Col1.X = invMass; K1.Col2.X = 0.0f;
+			K1.Col1.Y = 0.0f; K1.Col2.Y = invMass;
 
 			Mat22 K2 = new Mat22();
-			K2.Col1.x = invI * r.y * r.y; K2.Col2.x = -invI * r.x * r.y;
-			K2.Col1.y = -invI * r.x * r.y; K2.Col2.y = invI * r.x * r.x;
+			K2.Col1.X = invI * r.Y * r.Y; K2.Col2.X = -invI * r.X * r.Y;
+			K2.Col1.Y = -invI * r.X * r.Y; K2.Col2.Y = invI * r.X * r.X;
 
 			Mat22 K = K1 + K2;
-			K.Col1.x += _gamma;
-			K.Col2.y += _gamma;
+			K.Col1.X += _gamma;
+			K.Col2.Y += _gamma;
 
 			_mass = K.GetInverse();
 
@@ -212,9 +212,9 @@ namespace Box2DX.Dynamics
 			Vector2 oldImpulse = _impulse;
 			_impulse += impulse;
 			float maxImpulse = step.Dt * _maxForce;
-			if (_impulse.sqrMagnitude > maxImpulse * maxImpulse)
+			if (_impulse.LengthSquared > maxImpulse * maxImpulse)
 			{
-				_impulse *= maxImpulse / _impulse.magnitude;
+				_impulse *= maxImpulse / _impulse.Length;
 			}
 			impulse = _impulse - oldImpulse;
 

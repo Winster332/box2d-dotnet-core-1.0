@@ -24,7 +24,7 @@ using System;
 using Box2DX.Common;
 using Box2DX.Collision;
 
-using UnityEngine;
+using OpenTK;
 using Transform = Box2DX.Common.Transform;
 
 namespace Box2DX.Dynamics

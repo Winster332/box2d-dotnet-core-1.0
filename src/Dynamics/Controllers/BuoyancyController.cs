@@ -1,5 +1,5 @@
 ﻿using Box2DX.Common;
-using UnityEngine;
+using OpenTK;
 
 namespace Box2DX.Dynamics.Controllers
 {
@@ -32,12 +32,12 @@ namespace Box2DX.Dynamics.Controllers
             Normal = new Vector2(0, 1);
             Offset = 0;
             Density = 0;
-            Velocity = Vector2.zero;
+            Velocity = Vector2.Zero;
             LinearDrag = 0;
             AngularDrag = 0;
             UseDensity = false;
             UseWorldGravity = true;
-            Gravity =  Vector2.zero;
+            Gravity =  Vector2.Zero;
         }
     }
 
@@ -97,8 +97,8 @@ namespace Box2DX.Dynamics.Controllers
                     //so unlike most forces, it is safe to ignore sleeping bodes
                     continue;
                 }
-                Vector2 areac = Vector2.zero; 
-                Vector2 massc = Vector2.zero;
+                Vector2 areac = Vector2.Zero; 
+                Vector2 massc = Vector2.Zero;
                 float area = 0;
                 float mass = 0;
                 for (Fixture shape = body.GetFixtureList(); shape != null; shape = shape.Next)
@@ -106,8 +106,8 @@ namespace Box2DX.Dynamics.Controllers
                     Vector2 sc;
                     float sarea = shape.ComputeSubmergedArea(Normal, Offset, out sc);
                     area += sarea;
-                    areac.x += sarea * sc.x;
-                    areac.y += sarea * sc.y;
+                    areac.X += sarea * sc.X;
+                    areac.Y += sarea * sc.Y;
                     float shapeDensity = 0;
                     if (UseDensity)
                     {
@@ -119,14 +119,14 @@ namespace Box2DX.Dynamics.Controllers
                         shapeDensity = 1;
                     }
                     mass += sarea * shapeDensity;
-                    massc.x += sarea * sc.x * shapeDensity;
-                    massc.y += sarea * sc.y * shapeDensity;
+                    massc.X += sarea * sc.X * shapeDensity;
+                    massc.Y += sarea * sc.Y * shapeDensity;
                 }
-                areac.x /= area;
-                areac.y /= area;
+                areac.X /= area;
+                areac.Y /= area;
                 //Vec2 localCentroid = Math.MulT(body.GetTransform(), areac);
-                massc.x /= mass;
-                massc.y /= mass;
+                massc.X /= mass;
+                massc.Y /= mass;
                 if (area < Settings.FLT_EPSILON)
                     continue;
                 //Buoyancy

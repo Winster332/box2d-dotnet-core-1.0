@@ -20,7 +20,7 @@
 */
 
 using Box2DX.Common;
-using UnityEngine;
+using OpenTK;
 
 using Transform = Box2DX.Common.Transform;
 
@@ -45,7 +45,7 @@ namespace Box2DX.Collision
 
 			manifold.Type = ManifoldType.Circles;
 			manifold.LocalPoint = circle1._position;
-			manifold.LocalPlaneNormal = Vector2.zero;
+			manifold.LocalPlaneNormal = Vector2.Zero;
 			manifold.PointCount = 1;
 
 			manifold.Points[0].LocalPoint = circle2._position;
@@ -107,7 +107,7 @@ namespace Box2DX.Collision
 			float u2 = Vector2.Dot(cLocal - v2, v1 - v2);
 			if (u1 <= 0.0f)
 			{
-				if ((cLocal - v1).sqrMagnitude > radius * radius)
+				if ((cLocal - v1).LengthSquared > radius * radius)
 				{
 					return;
 				}
@@ -122,7 +122,7 @@ namespace Box2DX.Collision
 			}
 			else if (u2 <= 0.0f)
 			{
-				if ((cLocal - v2).sqrMagnitude > radius * radius)
+				if ((cLocal - v2).LengthSquared > radius * radius)
 				{
 					return;
 				}

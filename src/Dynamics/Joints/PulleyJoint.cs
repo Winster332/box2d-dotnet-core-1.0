@@ -43,7 +43,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Box2DX.Common;
-using UnityEngine;
+using OpenTK;
 
 namespace Box2DX.Dynamics
 {
@@ -85,9 +85,9 @@ namespace Box2DX.Dynamics
 			LocalAnchor1 = body1.GetLocalPoint(anchor1);
 			LocalAnchor2 = body2.GetLocalPoint(anchor2);
 			Vector2 d1 = anchor1 - groundAnchor1;
-			Length1 = d1.magnitude;
+			Length1 = d1.Length;
 			Vector2 d2 = anchor2 - groundAnchor2;
-			Length2 = d2.magnitude;
+			Length2 = d2.Length;
 			Ratio = ratio;
 			Box2DXDebug.Assert(ratio > Settings.FLT_EPSILON);
 			float C = Length1 + ratio * Length2;
@@ -229,7 +229,7 @@ namespace Box2DX.Dynamics
 				Vector2 p = _body1.GetWorldPoint(_localAnchor1);
 				Vector2 s = _ground.GetTransform().position + _groundAnchor1;
 				Vector2 d = p - s;
-				return d.magnitude;
+				return d.Length;
 			}
 		}
 
@@ -243,7 +243,7 @@ namespace Box2DX.Dynamics
 				Vector2 p = _body2.GetWorldPoint(_localAnchor2);
 				Vector2 s = _ground.GetTransform().position + _groundAnchor2;
 				Vector2 d = p - s;
-				return d.magnitude;
+				return d.Length;
 			}
 		}
 
@@ -295,8 +295,8 @@ namespace Box2DX.Dynamics
 			_u1 = p1 - s1;
 			_u2 = p2 - s2;
 
-			float length1 = _u1.magnitude;
-			float length2 = _u2.magnitude;
+			float length1 = _u1.Length;
+			float length2 = _u2.Length;
 
 			if (length1 > Settings.LinearSlop)
 			{
@@ -304,7 +304,7 @@ namespace Box2DX.Dynamics
 			}
 			else
 			{
-				_u1 = Vector2.zero;
+				_u1 = Vector2.Zero;
 			}
 
 			if (length2 > Settings.LinearSlop)
@@ -313,7 +313,7 @@ namespace Box2DX.Dynamics
 			}
 			else
 			{
-				_u2 = Vector2.zero;
+				_u2 = Vector2.Zero;
 			}
 
 			float C = _constant - length1 - _ratio * length2;
@@ -464,8 +464,8 @@ namespace Box2DX.Dynamics
 				_u1 = p1 - s1;
 				_u2 = p2 - s2;
 
-				float length1 = _u1.magnitude;
-				float length2 = _u2.magnitude;
+				float length1 = _u1.Length;
+				float length2 = _u2.Length;
 
 				if (length1 > Settings.LinearSlop)
 				{
@@ -473,7 +473,7 @@ namespace Box2DX.Dynamics
 				}
 				else
 				{
-					_u1 = Vector2.zero;
+					_u1 = Vector2.Zero;
 				}
 
 				if (length2 > Settings.LinearSlop)
@@ -482,13 +482,13 @@ namespace Box2DX.Dynamics
 				}
 				else
 				{
-					_u2 = Vector2.zero;
+					_u2 = Vector2.Zero;
 				}
 
 				float C = _constant - length1 - _ratio * length2;
 				linearError = Box2DXMath.Max(linearError, -C);
 
-				C = Mathf.Clamp(C + Settings.LinearSlop, -Settings.MaxLinearCorrection, 0.0f);
+				C = Box2DX.Common.Math.Clamp(C + Settings.LinearSlop, -Settings.MaxLinearCorrection, 0.0f);
 				float impulse = -_pulleyMass * C;
 
 				Vector2 P1 = -impulse * _u1;
@@ -509,7 +509,7 @@ namespace Box2DX.Dynamics
 				Vector2 p1 = b1._sweep.C + r1;
 
 				_u1 = p1 - s1;
-				float length1 = _u1.magnitude;
+				float length1 = _u1.Length;
 
 				if (length1 > Settings.LinearSlop)
 				{
@@ -517,12 +517,12 @@ namespace Box2DX.Dynamics
 				}
 				else
 				{
-					_u1 = Vector2.zero;
+					_u1 = Vector2.Zero;
 				}
 
 				float C = _maxLength1 - length1;
-				linearError = Mathf.Max(linearError, -C);
-				C = Mathf.Clamp(C + Settings.LinearSlop, -Settings.MaxLinearCorrection, 0.0f);
+				linearError = System.Math.Max(linearError, -C);
+				C = Box2DX.Common.Math.Clamp(C + Settings.LinearSlop, -Settings.MaxLinearCorrection, 0.0f);
 				float impulse = -_limitMass1 * C;
 
 				Vector2 P1 = -impulse * _u1;
@@ -538,7 +538,7 @@ namespace Box2DX.Dynamics
 				Vector2 p2 = b2._sweep.C + r2;
 
 				_u2 = p2 - s2;
-				float length2 = _u2.magnitude;
+				float length2 = _u2.Length;
 
 				if (length2 > Settings.LinearSlop)
 				{
@@ -546,12 +546,12 @@ namespace Box2DX.Dynamics
 				}
 				else
 				{
-					_u2 = Vector2.zero;
+					_u2 = Vector2.Zero;
 				}
 
 				float C = _maxLength2 - length2;
 				linearError = Box2DXMath.Max(linearError, -C);
-				C = Mathf.Clamp(C + Settings.LinearSlop, -Settings.MaxLinearCorrection, 0.0f);
+				C = Box2DX.Common.Math.Clamp(C + Settings.LinearSlop, -Settings.MaxLinearCorrection, 0.0f);
 				float impulse = -_limitMass2 * C;
 
 				Vector2 P2 = -impulse * _u2;

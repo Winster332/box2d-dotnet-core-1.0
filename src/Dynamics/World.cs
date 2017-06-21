@@ -23,7 +23,7 @@ using System;
 
 using Box2DX.Common;
 using Box2DX.Collision;
-using UnityEngine;
+using OpenTK;
 
 using Transform = Box2DX.Common.Transform;
 
@@ -974,7 +974,7 @@ namespace Box2DX.Dynamics
 						c._flags |= Contact.CollisionFlags.Toi;
 					}
 
-					if (Mathf.Epsilon < toi && toi < minTOI)
+					if (Box2DX.Common.Math.Epsilon < toi && toi < minTOI)
 					{
 						// This is the minimum TOI found so far.
 						minContact = c;
@@ -982,7 +982,7 @@ namespace Box2DX.Dynamics
 					}
 				}
 
-				if (minContact == null || 1.0f - 100.0f * Mathf.Epsilon < minTOI)
+				if (minContact == null || 1.0f - 100.0f * Box2DX.Common.Math.Epsilon < minTOI)
 				{
 					// No more TOI events. Done!
 					break;
@@ -1336,7 +1336,7 @@ namespace Box2DX.Dynamics
 			if ((flags & DebugDraw.DrawFlags.Pair) != 0)
 			{
 				BroadPhase bp = _broadPhase;
-				Vector2 invQ = new Vector2(1.0f / bp._quantizationFactor.x, 1.0f / bp._quantizationFactor.y);
+				Vector2 invQ = new Vector2(1.0f / bp._quantizationFactor.X, 1.0f / bp._quantizationFactor.Y);
 				Color color = new Color(0.9f, 0.9f, 0.3f);
 
 				for (int i = 0; i < PairManager.TableCapacity; ++i)
@@ -1349,14 +1349,14 @@ namespace Box2DX.Dynamics
 						Proxy p2 = bp._proxyPool[pair.ProxyId2];
 
 						AABB b1 = new AABB(), b2 = new AABB();
-						b1.LowerBound.x = bp._worldAABB.LowerBound.x + invQ.x * bp._bounds[0][p1.LowerBounds[0]].Value;
-						b1.LowerBound.y = bp._worldAABB.LowerBound.y + invQ.y * bp._bounds[1][p1.LowerBounds[1]].Value;
-						b1.UpperBound.x = bp._worldAABB.LowerBound.x + invQ.x * bp._bounds[0][p1.UpperBounds[0]].Value;
-						b1.UpperBound.y = bp._worldAABB.LowerBound.y + invQ.y * bp._bounds[1][p1.UpperBounds[1]].Value;
-						b2.LowerBound.x = bp._worldAABB.LowerBound.x + invQ.x * bp._bounds[0][p2.LowerBounds[0]].Value;
-						b2.LowerBound.y = bp._worldAABB.LowerBound.y + invQ.y * bp._bounds[1][p2.LowerBounds[1]].Value;
-						b2.UpperBound.x = bp._worldAABB.LowerBound.x + invQ.x * bp._bounds[0][p2.UpperBounds[0]].Value;
-						b2.UpperBound.y = bp._worldAABB.LowerBound.y + invQ.y * bp._bounds[1][p2.UpperBounds[1]].Value;
+						b1.LowerBound.X = bp._worldAABB.LowerBound.X + invQ.X * bp._bounds[0][p1.LowerBounds[0]].Value;
+						b1.LowerBound.Y = bp._worldAABB.LowerBound.Y + invQ.Y * bp._bounds[1][p1.LowerBounds[1]].Value;
+						b1.UpperBound.X = bp._worldAABB.LowerBound.X + invQ.X * bp._bounds[0][p1.UpperBounds[0]].Value;
+						b1.UpperBound.Y = bp._worldAABB.LowerBound.Y + invQ.Y * bp._bounds[1][p1.UpperBounds[1]].Value;
+						b2.LowerBound.X = bp._worldAABB.LowerBound.X + invQ.X * bp._bounds[0][p2.LowerBounds[0]].Value;
+						b2.LowerBound.Y = bp._worldAABB.LowerBound.Y + invQ.Y * bp._bounds[1][p2.LowerBounds[1]].Value;
+						b2.UpperBound.X = bp._worldAABB.LowerBound.X + invQ.X * bp._bounds[0][p2.UpperBounds[0]].Value;
+						b2.UpperBound.Y = bp._worldAABB.LowerBound.Y + invQ.Y * bp._bounds[1][p2.UpperBounds[1]].Value;
 
 						Vector2 x1 = 0.5f * (b1.LowerBound + b1.UpperBound);
 						Vector2 x2 = 0.5f * (b2.LowerBound + b2.UpperBound);
@@ -1374,7 +1374,7 @@ namespace Box2DX.Dynamics
 				Vector2 worldLower = bp._worldAABB.LowerBound;
 				Vector2 worldUpper = bp._worldAABB.UpperBound;
 
-				Vector2 invQ = new Vector2(1.0f / bp._quantizationFactor.x, 1.0f / bp._quantizationFactor.y);
+				Vector2 invQ = new Vector2(1.0f / bp._quantizationFactor.X, 1.0f / bp._quantizationFactor.Y);
 				Color color = new Color(0.9f, 0.3f, 0.9f);
 				for (int i = 0; i < Settings.MaxProxies; ++i)
 				{
@@ -1385,25 +1385,25 @@ namespace Box2DX.Dynamics
 					}
 
 					AABB b = new AABB();
-					b.LowerBound.x = worldLower.x + invQ.x * bp._bounds[0][p.LowerBounds[0]].Value;
-					b.LowerBound.y = worldLower.y + invQ.y * bp._bounds[1][p.LowerBounds[1]].Value;
-					b.UpperBound.x = worldLower.x + invQ.x * bp._bounds[0][p.UpperBounds[0]].Value;
-					b.UpperBound.y = worldLower.y + invQ.y * bp._bounds[1][p.UpperBounds[1]].Value;
+					b.LowerBound.X = worldLower.X + invQ.X * bp._bounds[0][p.LowerBounds[0]].Value;
+					b.LowerBound.Y = worldLower.Y + invQ.Y * bp._bounds[1][p.LowerBounds[1]].Value;
+					b.UpperBound.X = worldLower.X + invQ.X * bp._bounds[0][p.UpperBounds[0]].Value;
+					b.UpperBound.Y = worldLower.Y + invQ.Y * bp._bounds[1][p.UpperBounds[1]].Value;
 
 					Vector2[] vs1 = new Vector2[4];
-					vs1[0] = new Vector2(b.LowerBound.x, b.LowerBound.y);
-					vs1[1] = new Vector2(b.UpperBound.x, b.LowerBound.y);
-					vs1[2] = new Vector2(b.UpperBound.x, b.UpperBound.y);
-					vs1[3] = new Vector2(b.LowerBound.x, b.UpperBound.y);
+					vs1[0] = new Vector2(b.LowerBound.X, b.LowerBound.Y);
+					vs1[1] = new Vector2(b.UpperBound.X, b.LowerBound.Y);
+					vs1[2] = new Vector2(b.UpperBound.X, b.UpperBound.Y);
+					vs1[3] = new Vector2(b.LowerBound.X, b.UpperBound.Y);
 
 					_debugDraw.DrawPolygon(vs1, 4, color);
 				}
 
 				Vector2[] vs = new Vector2[4];
-				vs[0] = new Vector2(worldLower.x, worldLower.y);
-				vs[1] = new Vector2(worldUpper.x, worldLower.y);
-				vs[2] = new Vector2(worldUpper.x, worldUpper.y);
-				vs[3] = new Vector2(worldLower.x, worldUpper.y);
+				vs[0] = new Vector2(worldLower.X, worldLower.Y);
+				vs[1] = new Vector2(worldUpper.X, worldLower.Y);
+				vs[2] = new Vector2(worldUpper.X, worldUpper.Y);
+				vs[3] = new Vector2(worldLower.X, worldUpper.Y);
 				_debugDraw.DrawPolygon(vs, 4, new Color(0.3f, 0.9f, 0.9f));
 			}
 

@@ -1,15 +1,12 @@
-﻿/*
+/*
   Box2DX Copyright (c) 2008 Ihar Kalasouski http://code.google.com/p/box2dx
   Box2D original C++ version Copyright (c) 2006-2007 Erin Catto http://www.gphysics.com
-
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
   arising from the use of this software.
-
   Permission is granted to anyone to use this software for any purpose,
   including commercial applications, and to alter it and redistribute it
   freely, subject to the following restrictions:
-
   1. The origin of this software must not be misrepresented; you must not
      claim that you wrote the original software. If you use this software
      in a product, an acknowledgment in the product documentation would be
@@ -22,8 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
-using UnityEngine;
+using OpenTK;
 
 namespace Box2DX.Common
 {
@@ -49,8 +45,8 @@ namespace Box2DX.Common
 		/// </summary>
 		public Mat22(float a11, float a12, float a21, float a22)
 		{
-			Col1.x = a11; Col1.y = a21;
-			Col2.x = a12; Col2.y = a22;
+			Col1.X = a11; Col1.Y = a21;
+			Col2.X = a12; Col2.Y = a22;
 		}
 
 		/// <summary>
@@ -59,10 +55,10 @@ namespace Box2DX.Common
 		/// </summary>
 		public Mat22(float angle)
 		{
-			float c = Mathf.Cos(angle);
-			float s = Mathf.Sin(angle);
-			Col1.x = c; Col2.x = -s;
-			Col1.y = s; Col2.y = c;
+			float c = (float)System.Math.Cos(angle);
+			float s = (float)System.Math.Sin(angle);
+			Col1.X = c; Col2.X = -s;
+			Col1.Y = s; Col2.Y = c;
 		}
 
 		/// <summary>
@@ -80,10 +76,10 @@ namespace Box2DX.Common
 		/// </summary>
 		public void Set(float angle)
 		{
-			float c = Mathf.Cos(angle);
-			float s = Mathf.Sin(angle);
-			Col1.x = c; Col2.x = -s;
-			Col1.y = s; Col2.y = c;
+			float c = (float)System.Math.Cos(angle);
+			float s = (float)System.Math.Sin(angle);
+			Col1.X = c; Col2.X = -s;
+			Col1.Y = s; Col2.Y = c;
 		}
 
 		/// <summary>
@@ -91,11 +87,11 @@ namespace Box2DX.Common
 		/// </summary>
 		public float GetAngle()
 		{
-			return Mathf.Atan2(Col1.y, Col1.x);
+			return Math.Atan2(Col1.Y, Col1.X);
 		}
 		
 		public Vector2 Multiply(Vector2 vector) { 
-			return new Vector2(Col1.x * vector.x + Col2.x * vector.y, Col1.y * vector.x + Col2.y * vector.y);
+			return new Vector2(Col1.X * vector.Y + Col2.X * vector.Y, Col1.Y * vector.X + Col2.Y * vector.Y);
 		}
 		
 		/// <summary>
@@ -103,13 +99,13 @@ namespace Box2DX.Common
 		/// </summary>
 		public Mat22 GetInverse()
 		{
-			float a = Col1.x, b = Col2.x, c = Col1.y, d = Col2.y;
+			float a = Col1.X, b = Col2.X, c = Col1.Y, d = Col2.Y;
 			Mat22 B = new Mat22();
 			float det = a * d - b * c;
 			Box2DXDebug.Assert(det != 0.0f);
 			det = 1.0f / det;
-			B.Col1.x = det * d; B.Col2.x = -det * b;
-			B.Col1.y = -det * c; B.Col2.y = det * a;
+			B.Col1.X = det * d; B.Col2.X = -det * b;
+			B.Col1.Y = -det * c; B.Col2.Y = det * a;
 			return B;
 		}
 
@@ -119,13 +115,13 @@ namespace Box2DX.Common
 		/// </summary>
 		public Vector2 Solve(Vector2 b)
 		{
-			float a11 = Col1.x, a12 = Col2.x, a21 = Col1.y, a22 = Col2.y;
+			float a11 = Col1.X, a12 = Col2.X, a21 = Col1.Y, a22 = Col2.Y;
 			float det = a11 * a22 - a12 * a21;
 			Box2DXDebug.Assert(det != 0.0f);
 			det = 1.0f / det;
 			Vector2 x = new Vector2();
-			x.x = det * (a22 * b.x - a12 * b.y);
-			x.y = det * (a11 * b.y - a21 * b.x);
+			x.X = det * (a22 * b.X - a12 * b.Y);
+			x.Y = det * (a11 * b.Y - a21 * b.X);
 			return x;
 		}
 
