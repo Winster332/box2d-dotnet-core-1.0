@@ -32,7 +32,7 @@ namespace Box2DX
 			{
 				condition = condition;
 			}
-			Debug.Assert(condition);
+		//	Debug.Assert(condition);
 		}
 
 		[Conditional("DEBUG")]

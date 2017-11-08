@@ -6,3 +6,14 @@
 /home/stas/git/box2d-dotnet-core-1.0/obj/Debug/netcoreapp1.1/Box2D.AssemblyInfo.cs
 /home/stas/git/box2d-dotnet-core-1.0/obj/Debug/netcoreapp1.1/Box2D.dll
 /home/stas/git/box2d-dotnet-core-1.0/obj/Debug/netcoreapp1.1/Box2D.pdb
+C:\Users\Winster332\git\box2d-dotnet-core-1.0\bin\Debug\netcoreapp1.1\Box2D.deps.json
+C:\Users\Winster332\git\box2d-dotnet-core-1.0\bin\Debug\netcoreapp1.1\Box2D.runtimeconfig.json
+C:\Users\Winster332\git\box2d-dotnet-core-1.0\bin\Debug\netcoreapp1.1\Box2D.runtimeconfig.dev.json
+C:\Users\Winster332\git\box2d-dotnet-core-1.0\bin\Debug\netcoreapp1.1\Box2D.dll
+C:\Users\Winster332\git\box2d-dotnet-core-1.0\bin\Debug\netcoreapp1.1\Box2D.pdb
+C:\Users\Winster332\git\box2d-dotnet-core-1.0\obj\Debug\netcoreapp1.1\Box2D.csprojResolveAssemblyReference.cache
+C:\Users\Winster332\git\box2d-dotnet-core-1.0\obj\Debug\netcoreapp1.1\Box2D.csproj.CoreCompileInputs.cache
+C:\Users\Winster332\git\box2d-dotnet-core-1.0\obj\Debug\netcoreapp1.1\Box2D.AssemblyInfoInputs.cache
+C:\Users\Winster332\git\box2d-dotnet-core-1.0\obj\Debug\netcoreapp1.1\Box2D.AssemblyInfo.cs
+C:\Users\Winster332\git\box2d-dotnet-core-1.0\obj\Debug\netcoreapp1.1\Box2D.dll
+C:\Users\Winster332\git\box2d-dotnet-core-1.0\obj\Debug\netcoreapp1.1\Box2D.pdb
